@@ -1,0 +1,14 @@
+# Full-resolution source photography and the hero PSD — ~340MB, and the site
+# does not serve them. Everything the site needs is already exported into
+# assets/img/. Keep these in your own backup / Drive, not in the repo.
+new imgs/
+landingpage.psd
+
+# Local editor / tooling config
+.claude/
+
+# OS junk
+Thumbs.db
+ehthumbs.db
+Desktop.ini
+.DS_Store

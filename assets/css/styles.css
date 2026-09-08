@@ -1,0 +1,782 @@
+/* ============================================================
+   Work Beyond Borders — site styles
+   ============================================================ */
+
+/* ---------- tokens ---------- */
+:root{
+  --orange:#d14a22;
+  --orange-deep:#b93d18;
+  --orange-bright:#ff7342;
+  --ink:#1a1817;
+  --ink-2:#4a4643;
+  --ink-3:#77716c;
+  --paper:#f2f1f1;
+  --cream:#f2efe5;
+  --white:#fff;
+  --line:rgba(26,24,23,.12);
+
+  --serif:"Playfair Display",Georgia,"Times New Roman",serif;
+  --sans:"Figtree","Segoe UI",Helvetica,Arial,sans-serif;
+
+  --shell:1160px;
+  --gut:clamp(20px,5vw,48px);
+  --r-sm:10px;
+  --r-md:18px;
+  --r-lg:28px;
+  --r-xl:40px;
+
+  --header-h:88px;
+
+  /* Type scale measured off the Canva file: each vw figure is the design's
+     px size divided by the 1162px canvas width. That reproduces the design's
+     proportions at any viewport instead of the airier scale I first guessed.
+     Clamps keep it readable on phones and sane on very wide monitors. */
+  --fs-nav:clamp(13px,1.16vw,17px);
+  --fs-btn:clamp(12.5px,1.16vw,16px);
+  --fs-eyebrow:clamp(10px,.81vw,12px);
+  --fs-display:clamp(30px,4.47vw,66px);
+  --fs-lede:clamp(14px,1.34vw,19px);
+  --fs-body:clamp(13px,1.17vw,16.5px);
+  --fs-cardtitle:clamp(18px,2.02vw,28px);
+}
+
+/* ---------- reset ---------- */
+*,*::before,*::after{box-sizing:border-box}
+html{-webkit-text-size-adjust:100%;scroll-behavior:smooth}
+body{
+  margin:0;
+  background:var(--paper);
+  color:var(--ink);
+  font-family:var(--sans);
+  font-size:16px;
+  line-height:1.6;
+  -webkit-font-smoothing:antialiased;
+}
+/* `clip` (not `hidden`) — `hidden` would turn <body> into a scroll container
+   and break painting of the fixed header and everything below the fold. */
+html,body{overflow-x:clip}
+@supports not (overflow:clip){
+  html{overflow-x:hidden}
+}
+img{max-width:100%;display:block}
+a{color:inherit;text-decoration:none}
+button{font:inherit;color:inherit;border:0;background:none;cursor:pointer}
+h1,h2,h3,h4,p,figure,blockquote,ul{margin:0}
+ul{padding:0;list-style:none}
+input{font:inherit}
+:focus-visible{outline:2px solid var(--orange);outline-offset:3px;border-radius:4px}
+
+/* ---------- helpers ---------- */
+.shell{width:100%;max-width:var(--shell);margin-inline:auto;padding-inline:var(--gut)}
+.eyebrow{
+  font-size:var(--fs-eyebrow);font-weight:600;letter-spacing:.16em;text-transform:uppercase;
+  color:var(--ink-3);
+}
+.display{
+  font-family:var(--serif);font-weight:500;line-height:.98;letter-spacing:-.01em;
+  font-size:var(--fs-display);
+}
+.display em{font-style:italic;font-weight:500}
+.lede{color:var(--ink-2);font-size:var(--fs-lede);line-height:1.45}
+.sr-only{
+  position:absolute;width:1px;height:1px;padding:0;margin:-1px;
+  overflow:hidden;clip:rect(0 0 0 0);white-space:nowrap;border:0;
+}
+
+/* ---------- buttons ---------- */
+.btn{
+  display:inline-flex;align-items:center;gap:.5em;
+  padding:.82em 1.5em;border-radius:999px;
+  font-size:var(--fs-btn);font-weight:600;line-height:1;
+  transition:background .25s,color .25s,transform .25s,box-shadow .25s;
+  white-space:nowrap;
+}
+.btn:hover{transform:translateY(-2px)}
+.btn--primary{background:var(--orange);color:#fff;box-shadow:0 8px 22px rgba(209,74,34,.28)}
+.btn--primary:hover{background:var(--orange-deep);box-shadow:0 12px 28px rgba(209,74,34,.36)}
+.btn--ghost{background:rgba(255,255,255,.94);color:var(--ink);box-shadow:0 8px 22px rgba(0,0,0,.14)}
+.btn--ghost:hover{background:#fff}
+.btn--dark{background:var(--ink);color:#fff}
+.btn--dark:hover{background:#000}
+.btn--sm{padding:.62em 1.15em;font-size:.83rem}
+
+/* ============================================================
+   HEADER
+   ============================================================ */
+.site-header{
+  position:fixed;inset:0 0 auto;z-index:80;
+  height:var(--header-h);
+  display:flex;align-items:center;
+  background:linear-gradient(180deg,rgba(20,18,16,.42),rgba(20,18,16,0));
+  transition:background .3s,box-shadow .3s,backdrop-filter .3s;
+}
+.site-header.is-stuck{
+  background:rgba(250,249,248,.92);
+  backdrop-filter:saturate(160%) blur(14px);
+  -webkit-backdrop-filter:saturate(160%) blur(14px);
+  box-shadow:0 1px 0 var(--line),0 10px 30px rgba(0,0,0,.06);
+}
+.site-header .shell{display:flex;align-items:center;justify-content:space-between;gap:24px}
+
+.brand{display:flex;align-items:center;gap:12px;color:#fff}
+.brand img{width:42px;height:auto}
+.brand span{font-family:var(--serif);font-size:clamp(14px,1.16vw,17px);letter-spacing:.01em}
+.is-stuck .brand{color:var(--ink)}
+
+.nav{display:flex;align-items:center;gap:30px}
+.nav a{
+  position:relative;color:rgba(255,255,255,.94);font-size:var(--fs-nav);font-weight:500;
+  padding-block:6px;transition:color .2s,opacity .2s;
+}
+.nav a::after{
+  content:"";position:absolute;left:0;right:0;bottom:0;height:1.5px;
+  background:currentColor;transform:scaleX(0);transform-origin:left;
+  transition:transform .28s cubic-bezier(.4,0,.2,1);
+}
+.nav a:hover::after,.nav a[aria-current="page"]::after{transform:scaleX(1)}
+.nav a[aria-current="page"]{font-weight:700}
+.is-stuck .nav a{color:var(--ink-2)}
+.is-stuck .nav a[aria-current="page"]{color:var(--ink)}
+
+.header-cta{display:flex;align-items:center;gap:14px}
+
+.nav-toggle{
+  display:none;width:44px;height:44px;border-radius:50%;
+  align-items:center;justify-content:center;color:#fff;
+}
+.is-stuck .nav-toggle{color:var(--ink)}
+.nav-toggle span{display:block;width:20px;height:1.6px;background:currentColor;position:relative}
+.nav-toggle span::before,.nav-toggle span::after{
+  content:"";position:absolute;left:0;width:20px;height:1.6px;background:currentColor;
+  transition:transform .3s,top .3s;
+}
+.nav-toggle span::before{top:-6px}
+.nav-toggle span::after{top:6px}
+.nav-open .nav-toggle span{background:transparent}
+.nav-open .nav-toggle span::before{top:0;transform:rotate(45deg)}
+.nav-open .nav-toggle span::after{top:0;transform:rotate(-45deg)}
+
+/* ============================================================
+   HERO — landing
+   ============================================================ */
+.hero{
+  position:relative;isolation:isolate;
+  min-height:min(112vh,1040px);
+  padding-top:calc(var(--header-h) + 4vh);
+  padding-bottom:70px;
+  display:flex;flex-direction:column;justify-content:center;
+  overflow:hidden;
+}
+.hero__bg{
+  position:absolute;inset:0;z-index:-3;
+  background:url("../img/hero-bg.jpg") center 30% / cover no-repeat;
+  /* the source alley shot is genuinely dark (mean RGB ~53); Canva lifts it in
+     the design, so match that here rather than shipping a muddy hero */
+  filter:brightness(1.26) saturate(1.06) contrast(.97);
+  -webkit-mask-image:linear-gradient(180deg,#000 0,#000 68%,transparent 97%);
+          mask-image:linear-gradient(180deg,#000 0,#000 68%,transparent 97%);
+}
+.hero__bg::after{
+  content:"";position:absolute;inset:0;
+  background:linear-gradient(180deg,rgba(18,16,14,.34) 0,rgba(18,16,14,.15) 42%,rgba(18,16,14,.05) 70%,transparent 88%);
+}
+.hero__glow{
+  position:absolute;z-index:-2;right:-14%;bottom:-6%;
+  width:min(46vw,620px);aspect-ratio:1;
+  background:radial-gradient(circle,rgba(255,150,20,.95),rgba(255,150,20,.45) 42%,transparent 70%);
+  filter:blur(14px);pointer-events:none;
+}
+
+.hero__inner{position:relative;text-align:center;color:#fff;z-index:2}
+.hero__eyebrow{
+  font-size:clamp(11px,1.02vw,15px);letter-spacing:.02em;color:rgba(255,255,255,.9);margin-bottom:16px;
+}
+.hero h1{
+  font-family:var(--serif);font-weight:500;line-height:1;letter-spacing:-.02em;
+  font-size:clamp(2.4rem,6.43vw,5.6rem);
+  text-shadow:0 3px 26px rgba(0,0,0,.55);
+}
+.hero h1 em{display:block;font-style:italic}
+.hero__sub{
+  max-width:min(64%,62ch);margin:22px auto 0;
+  font-size:clamp(15px,1.72vw,22px);line-height:1.4;
+  color:rgba(255,255,255,.96);text-shadow:0 2px 18px rgba(0,0,0,.62);
+}
+.hero__actions{display:flex;flex-wrap:wrap;gap:14px;justify-content:center;margin-top:28px}
+
+/* Placement mirrors the layer geometry in landingpage.psd: two people
+   crowding in from the left edge, two from the right, all sized by height
+   so each keeps its own proportions. */
+.hero__cut{
+  position:absolute;z-index:1;width:auto;pointer-events:none;
+  filter:drop-shadow(0 22px 40px rgba(0,0,0,.3));
+}
+.hero__cut--tr{right:-9%;top:9%;height:55%}
+.hero__cut--br{right:-4%;top:45%;height:53%}
+.hero__cut--tl{left:-4%;top:30%;height:56%}
+.hero__cut--bl{left:-6%;top:53%;height:44%}
+
+/* Narrower desktops: the hero box gets much wider than tall relative to the
+   PSD frame, so the four figures close in on the headline, the buttons and the
+   stats row. Shrink them and push them back out to the edges. */
+@media (max-width:1320px) and (min-width:901px){
+  .hero__cut--tr{right:-11%;top:5%;height:50%}
+  .hero__cut--br{right:-7%;top:32%;height:52%}
+  .hero__cut--tl{left:-8%;top:21%;height:52%}
+  .hero__cut--bl{left:-8%;top:38%;height:46%}
+}
+
+/* Tightest desktop band: the headline column takes almost the whole width
+   here, so the outer two step back further still. */
+@media (max-width:1100px) and (min-width:901px){
+  .hero__cut--tr{right:-15%;top:6%;height:44%}
+  .hero__cut--br{right:-11%;top:33%;height:46%}
+  .hero__cut--tl{left:-13%;top:23%;height:45%}
+  .hero__cut--bl{left:-12%;top:39%;height:41%}
+}
+
+.hero__stats{
+  position:relative;z-index:2;margin-top:auto;padding-top:min(16vh,150px);
+  color:#fff;
+}
+.hero__stats ul{
+  display:flex;flex-wrap:wrap;align-items:baseline;justify-content:center;
+  gap:14px clamp(20px,4vw,46px);
+  padding-bottom:20px;border-bottom:1px solid rgba(255,255,255,.32);
+}
+.hero__stats li{font-size:clamp(11px,.84vw,13px);color:rgba(255,255,255,.9);text-shadow:0 2px 14px rgba(0,0,0,.5)}
+.hero__stats .num{font-family:var(--serif);font-size:clamp(17px,1.73vw,25px);letter-spacing:.01em}
+
+/* ============================================================
+   SECTIONS
+   ============================================================ */
+.section{position:relative;padding-block:clamp(44px,5.6vw,74px)}
+.section--tight{padding-block:clamp(34px,4vw,54px)}
+.section__head{position:relative;z-index:1;max-width:470px}
+.section__head--center{max-width:560px}
+.section__head--center{margin-inline:auto;text-align:center}
+.section__head .eyebrow{display:block;margin-bottom:12px}
+.section__head .lede{margin-top:14px}
+
+.glow{
+  position:absolute;z-index:0;pointer-events:none;border-radius:50%;
+  background:radial-gradient(circle,rgba(255,150,20,.85),rgba(255,150,20,.35) 45%,transparent 70%);
+  filter:blur(10px);
+}
+.glow--right{right:-16%;top:6%;width:min(40vw,520px);aspect-ratio:1}
+.glow--left{left:-22%;bottom:-8%;width:min(46vw,600px);aspect-ratio:1;opacity:.55}
+
+/* The design does not sit these sections on flat grey — it washes them with a
+   peach-to-orange field that gets hot towards the right. */
+#what-we-do{
+  background:
+    radial-gradient(58% 44% at 104% 26%,rgba(255,150,20,.55),transparent 68%),
+    radial-gradient(70% 50% at 92% 78%,rgba(255,176,90,.3),transparent 72%);
+}
+#case-studies{
+  /* the design leaves a deep orange gap under the cards for the calculator
+     and laptop to hang into, before the 280M photo band starts */
+  padding-bottom:clamp(96px,14vw,215px);
+  background:
+    radial-gradient(52% 42% at 100% 68%,rgba(255,138,10,.62),transparent 70%),
+    radial-gradient(60% 46% at -6% 44%,rgba(255,186,120,.42),transparent 72%),
+    linear-gradient(168deg,transparent 34%,rgba(255,196,140,.3) 78%,rgba(255,168,80,.34) 100%);
+}
+#what-we-do > .shell,#case-studies > .shell{position:relative;z-index:1}
+
+/* ---------- service cards ---------- */
+.cards{
+  position:relative;z-index:1;
+  display:grid;grid-template-columns:repeat(3,1fr);gap:24px;align-items:start;
+  margin-top:clamp(34px,4.2vw,56px);
+}
+.card{
+  background:linear-gradient(180deg,#fffefb,#faf7f0);
+  border:1px solid rgba(26,24,23,.06);
+  border-radius:var(--r-md);
+  padding:14px 14px 22px;
+  box-shadow:0 18px 44px rgba(26,24,23,.09);
+  transition:transform .35s cubic-bezier(.4,0,.2,1),box-shadow .35s;
+}
+.card:hover{transform:translateY(-6px);box-shadow:0 28px 60px rgba(26,24,23,.14)}
+.card__media{border-radius:8px;overflow:hidden;aspect-ratio:3/2;background:#e7e3dd}
+.card__media img{width:100%;height:100%;object-fit:cover;transition:transform .6s cubic-bezier(.4,0,.2,1)}
+.card:hover .card__media img{transform:scale(1.06)}
+.card__num{font-family:var(--serif);font-size:clamp(12px,1.12vw,16px);color:var(--ink-3);margin:16px 4px 8px}
+.card h3{font-family:var(--serif);font-size:var(--fs-cardtitle);font-weight:500;margin:0 4px 12px;line-height:1.05}
+.card p{margin:0 4px;color:var(--ink-2);font-size:var(--fs-body);line-height:1.5}
+
+/* ---------- case studies ---------- */
+.cases{
+  position:relative;z-index:1;
+  display:grid;grid-template-columns:repeat(3,1fr);gap:24px;
+}
+.case{
+  background:var(--cream);border-radius:var(--r-md);
+  padding:20px 20px 24px;
+  transition:transform .35s cubic-bezier(.4,0,.2,1),box-shadow .35s;
+}
+.case:hover{transform:translateY(-5px);box-shadow:0 22px 50px rgba(26,24,23,.12)}
+.case__tag{
+  display:inline-block;padding:.42em 1em;border-radius:999px;
+  border:1px solid rgba(26,24,23,.22);
+  font-size:clamp(10px,.94vw,13px);font-weight:600;letter-spacing:.1em;text-transform:uppercase;
+  color:var(--ink-2);
+}
+.case h3{font-family:var(--serif);font-size:clamp(18px,2.05vw,28px);font-weight:500;line-height:1.02;margin:14px 0 10px}
+.case p{color:var(--ink-2);font-size:var(--fs-body);line-height:1.45}
+
+/* ---------- halftone collage stickers ----------------------------------
+   The cut-out props from the Canva design. All decorative: aria-hidden in
+   the markup and pointer-events:none here so they never intercept a click.
+   Every one is placed to clear the text it sits near — see the notes on
+   .cases below for why the case-study props anchor to the card edges. */
+@keyframes wbb-float{
+  from{transform:translate3d(0,calc(var(--float) * -1),0)}
+  to  {transform:translate3d(0,var(--float),0)}
+}
+.sticker{
+  position:absolute;z-index:2;pointer-events:none;
+  filter:drop-shadow(0 12px 22px rgba(26,24,23,.18));
+  /* `rotate` is its own property, so the float can own `transform` outright */
+  --float:7px;
+  animation:wbb-float var(--float-dur,7s) ease-in-out infinite alternate;
+  animation-delay:var(--float-delay,0s);
+  will-change:transform;
+}
+
+/* case studies — the two props above the cards are sized by --prop, and the
+   row's top margin is derived from that same value plus a gap. So the band
+   they sit in is always tall enough for them: they can never reach up into
+   the lede, nor down onto the "Case Study" tags. */
+.cases{
+  position:relative;
+  --prop:clamp(104px,13vw,182px);
+  /* A rotated element's footprint is its diagonal, not its height, and the
+     float adds a few more pixels on top — hence the 1.3 rather than a bare
+     var(--prop). Under-budget this and the props creep onto the lede. */
+  margin-top:calc(var(--prop) * 1.3 + clamp(30px,3.4vw,48px));
+}
+.st-megaphone {left:-11%;bottom:100%;margin-bottom:10px;width:auto;height:var(--prop);rotate:-14deg;--float-dur:8.5s}
+.st-papers    {left:29%;bottom:100%;margin-bottom:18px;width:auto;height:calc(var(--prop) * .8);rotate:6deg;--float:9px;--float-dur:7.4s;--float-delay:-2.1s}
+.st-calculator{left:2%;top:100%;margin-top:22px;width:clamp(88px,11vw,144px);rotate:-18deg;--float:6px;--float-dur:6.6s;--float-delay:-1.2s}
+.st-laptop    {right:-9%;top:100%;margin-top:-18px;width:clamp(110px,15vw,196px);rotate:8deg;--float:8px;--float-dur:9.2s;--float-delay:-3.4s}
+
+/* strengths — the props stand in for the photo, as they do in the design */
+.collage{position:relative;aspect-ratio:1/1.06;min-height:300px}
+.collage .sticker{filter:drop-shadow(0 14px 26px rgba(26,24,23,.16))}
+.st-plane    {left:2%;top:8%;width:42%;rotate:-6deg;--float:10px;--float-dur:8s}
+.st-notes    {left:46%;top:0;width:40%;rotate:7deg;--float:8px;--float-dur:6.8s;--float-delay:-1.7s}
+.st-imac     {left:0;top:46%;width:46%;rotate:-3deg;--float:7px;--float-dur:9.4s;--float-delay:-3s}
+.st-handshake{left:44%;top:56%;width:44%;rotate:5deg;--float:9px;--float-dur:7.8s;--float-delay:-4.2s}
+
+/* approach — pen and bulb live in the empty column above the cut-out; the
+   writing hand sits in the section's bottom padding, below the copy. */
+.st-pen    {left:1%;top:7%;width:clamp(74px,9vw,124px);rotate:-22deg;--float:8px;--float-dur:7.6s}
+.st-bulb   {left:9%;top:0;width:clamp(54px,6.5vw,88px);rotate:9deg;--float:10px;--float-dur:6.2s;--float-delay:-2.4s}
+/* Big, at the outer edge, and low — in the design it sits below the body
+   copy, not beside it, which is what keeps it off the text at this size. */
+.st-writing{right:-1%;top:100%;margin-top:-46px;width:clamp(110px,16vw,240px);rotate:3deg;--float:11px;--float-dur:8.8s;--float-delay:-1.5s}
+
+/* ---------- results band ---------- */
+.band{
+  position:relative;isolation:isolate;overflow:hidden;
+  min-height:min(64vh,540px);display:flex;align-items:center;
+  color:#fff;padding-block:clamp(60px,8vw,90px);
+}
+.band__bg{position:absolute;inset:0;z-index:-2}
+.band__bg img{width:100%;height:100%;object-fit:cover;object-position:center 42%}
+.band__bg::after{
+  content:"";position:absolute;inset:0;
+  background:linear-gradient(90deg,rgba(20,16,12,.15) 0,rgba(20,16,12,.35) 42%,rgba(120,60,10,.6) 78%,rgba(190,95,15,.62) 100%);
+}
+.band .shell{display:flex;justify-content:flex-end}
+.band__body{max-width:460px;text-align:center}
+.band h2{font-family:var(--serif);font-weight:500;font-size:clamp(20px,2.48vw,36px);margin-top:6px}
+.band p{margin-top:14px;color:rgba(255,255,255,.94);line-height:1.6;font-size:clamp(13.5px,1.27vw,18px)}
+.band .band__num{
+  margin-top:0;
+  font-family:var(--serif);font-style:italic;font-weight:400;
+  font-size:clamp(72px,14.49vw,205px);line-height:.88;letter-spacing:-.01em;
+  text-shadow:0 6px 40px rgba(0,0,0,.3);
+}
+.band .link-arrow{margin-top:22px}
+
+.link-arrow{
+  display:inline-flex;align-items:center;gap:.55em;
+  font-weight:600;font-size:var(--fs-btn);
+}
+.link-arrow i{font-style:normal;transition:transform .3s}
+.link-arrow:hover i{transform:translateX(-5px)}
+.link-arrow--fwd:hover i{transform:translateX(5px)}
+
+/* ---------- strengths ---------- */
+.strengths{position:relative;overflow:hidden}
+.strengths__grid{
+  display:grid;grid-template-columns:minmax(0,.86fr) minmax(0,1.14fr);
+  align-items:center;gap:clamp(24px,3vw,40px);
+  margin-top:clamp(26px,3.2vw,42px);
+}
+.strengths__art{position:relative;min-height:340px}
+.strengths__panel{
+  position:relative;z-index:3;
+  background:var(--orange-bright);color:#fff;
+  /* the design's panel is a flat slab, not a pill */
+  border-radius:6px;
+  padding:clamp(22px,2.6vw,34px);
+  box-shadow:0 24px 56px rgba(255,115,66,.24);
+  margin-right:calc((100vw - min(100vw,var(--shell)))/-2 - var(--gut));
+  padding-right:clamp(26px,5vw,70px);
+  border-top-right-radius:0;border-bottom-right-radius:0;
+}
+.strength + .strength{margin-top:18px;padding-top:18px;border-top:1px solid rgba(255,255,255,.3)}
+.strength__kicker{font-family:var(--serif);font-size:clamp(11px,.9vw,13px);opacity:.92}
+.strength h3{font-family:var(--serif);font-weight:500;font-size:clamp(16px,1.29vw,20px);margin:5px 0 8px}
+.strength p{font-size:clamp(12.5px,.91vw,14.5px);line-height:1.5;color:rgba(255,255,255,.95)}
+
+/* ---------- approach ---------- */
+.approach__grid{
+  display:grid;grid-template-columns:minmax(0,1fr) minmax(0,1fr);
+  gap:clamp(30px,5vw,64px);align-items:center;
+}
+.approach__media{display:flex;justify-content:center}
+.approach__media img{
+  width:auto;max-width:100%;height:auto;max-height:min(56vh,470px);
+  filter:drop-shadow(0 24px 44px rgba(26,24,23,.22));
+}
+.approach h2{margin-bottom:20px}
+.approach .btn{margin-top:28px}
+
+/* ---------- quote ---------- */
+.quote{position:relative;text-align:center;overflow:hidden}
+.quote__mark{
+  position:absolute;left:50%;top:50%;translate:-50% -50%;
+  width:min(58vw,430px);opacity:.16;pointer-events:none;
+}
+.quote blockquote{
+  position:relative;font-family:var(--serif);font-weight:500;
+  font-size:clamp(22px,2.7vw,39px);line-height:1.1;max-width:20ch;margin-inline:auto;
+}
+.quote blockquote em{font-style:italic;display:block}
+.quote figcaption{position:relative;margin-top:16px;color:var(--ink-2);font-size:clamp(11px,.88vw,13px)}
+
+/* ============================================================
+   FOOTER
+   ============================================================ */
+.site-footer{
+  position:relative;isolation:isolate;overflow:hidden;
+  padding-block:clamp(30px,4vw,54px) clamp(40px,5vw,64px);
+  background:
+    radial-gradient(115% 80% at 50% 0%,rgba(255,150,20,.18),transparent 62%),
+    linear-gradient(180deg,var(--paper) 0,#eeeae4 100%);
+}
+.footer-stage{position:relative}
+/* The team cut-out stands behind the panel; the negative margin is what pulls
+   the panel up over their lower half, so it stays put at any width. */
+.footer-art{
+  position:relative;z-index:1;display:block;height:auto;
+  /* Full-bleed: break out of the shell to both viewport edges. Capped at the
+     shell width it read as a photo floating in the middle of the footer. */
+  width:100vw;max-width:none;
+  margin-left:calc(50% - 50vw);
+  margin-right:calc(50% - 50vw);
+  /* the overlap is in vw so it tracks the image height, which is now a
+     fraction of the viewport width — keeps a constant ~33%% bite at any size */
+  margin-bottom:calc(-1 * clamp(56px,11.5vw,210px));
+  /* Now that the art runs the full width, the panel no longer hides the whole
+     of its straight bottom edge — so dissolve that edge into the background
+     instead of leaving a hard horizontal cut either side of the panel. */
+  -webkit-mask-image:linear-gradient(180deg,#000 0,#000 66%,transparent 99%);
+          mask-image:linear-gradient(180deg,#000 0,#000 66%,transparent 99%);
+}
+.footer-panel{
+  position:relative;z-index:2;
+  background:rgba(250,249,247,.74);
+  backdrop-filter:saturate(150%) blur(18px);
+  -webkit-backdrop-filter:saturate(150%) blur(18px);
+  border:1px solid rgba(255,255,255,.65);
+  border-radius:var(--r-lg);
+  padding:clamp(30px,4vw,46px);
+  box-shadow:0 30px 70px rgba(26,24,23,.16);
+}
+.footer-top{
+  display:grid;grid-template-columns:minmax(0,1.25fr) repeat(3,minmax(0,auto));
+  gap:clamp(24px,4vw,52px);
+}
+.footer-top h2{
+  font-family:var(--serif);font-weight:500;line-height:1.05;
+  font-size:clamp(22px,3.22vw,46px);
+}
+.footer-top h2 em{font-style:italic;display:block}
+.footer-col h3{
+  font-size:clamp(10px,.75vw,11.5px);font-weight:700;letter-spacing:.14em;text-transform:uppercase;
+  color:var(--ink);margin-bottom:12px;
+}
+.footer-col li{margin-bottom:7px}
+.footer-col a{font-size:clamp(12px,.9vw,14px);color:var(--ink-2);transition:color .2s}
+.footer-col a:hover{color:var(--orange)}
+.footer-bottom{
+  display:flex;flex-wrap:wrap;gap:12px;justify-content:space-between;
+  margin-top:clamp(28px,4vw,44px);padding-top:20px;
+  border-top:1px solid var(--line);
+  font-size:clamp(11px,.83vw,13px);color:var(--ink-3);
+}
+
+/* ============================================================
+   PAGE HERO (activities / careers)
+   ============================================================ */
+.page-hero{
+  position:relative;isolation:isolate;overflow:hidden;
+  min-height:min(94vh,820px);display:flex;align-items:center;
+  padding-top:calc(var(--header-h) + 40px);padding-bottom:70px;color:#fff;
+}
+.page-hero__bg{position:absolute;inset:0;z-index:-2}
+.page-hero__bg img{width:100%;height:100%;object-fit:cover}
+.page-hero__bg::after{
+  content:"";position:absolute;inset:0;
+  background:linear-gradient(180deg,rgba(16,14,12,.6),rgba(16,14,12,.3) 45%,rgba(16,14,12,.5));
+}
+.page-hero__grid{display:grid;grid-template-columns:minmax(0,1fr) minmax(0,1fr);gap:clamp(28px,5vw,60px);align-items:center}
+/* WBB mascot — an illustration, so it sits fully in frame rather than
+   cropping off the edge the way the photo cut-outs do. */
+.page-hero__cut{
+  position:absolute;z-index:-1;left:1.5%;bottom:0;
+  width:auto;height:clamp(180px,31%,340px);
+  pointer-events:none;filter:drop-shadow(0 16px 32px rgba(0,0,0,.45));
+  --float:8px;
+  animation:wbb-float 9s ease-in-out infinite alternate;
+}
+.page-title{
+  font-family:var(--serif);font-weight:500;letter-spacing:.01em;line-height:.95;
+  font-size:clamp(44px,7.4vw,110px);
+  text-shadow:0 6px 44px rgba(0,0,0,.4);
+}
+
+.glass{
+  background:transparent;
+  border:1px solid rgba(255,255,255,.55);
+  border-radius:14px;
+  padding:clamp(14px,1.8vw,22px) clamp(16px,2vw,26px);
+}
+.jump-list li + li{margin-top:6px}
+.jump-list a{
+  display:flex;align-items:center;gap:12px;
+  padding:5px 4px;border-radius:8px;
+  font-size:clamp(12px,1.1vw,16px);
+  transition:background .25s,padding-left .25s;
+}
+.jump-list a:hover{background:rgba(255,255,255,.14);padding-left:14px}
+.tri{
+  flex:none;width:0;height:0;
+  border-left:9px solid #fff;border-top:6px solid transparent;border-bottom:6px solid transparent;
+  transition:transform .25s;
+}
+.jump-list a:hover .tri{transform:translateX(3px)}
+.tri--orange{border-left-color:var(--orange-bright)}
+
+/* ============================================================
+   ACTIVITIES
+   ============================================================ */
+.meetup{position:relative;padding-block:clamp(34px,4.4vw,62px);scroll-margin-top:100px}
+.meetup__grid{
+  display:grid;grid-template-columns:minmax(0,.92fr) minmax(0,1.08fr);
+  gap:clamp(26px,4vw,52px);align-items:center;
+}
+.meetup--flip .meetup__grid{direction:rtl}
+.meetup--flip .meetup__grid > *{direction:ltr}
+.meetup__media{
+  border-radius:var(--r-lg);overflow:hidden;box-shadow:0 28px 66px rgba(26,24,23,.18);
+  /* bleed off the outer edge, the way the design does */
+  margin-right:calc((100vw - min(100vw,var(--shell)))/-2 - var(--gut));
+  border-top-right-radius:0;border-bottom-right-radius:0;
+}
+.meetup--flip .meetup__media{
+  margin-right:0;
+  margin-left:calc((100vw - min(100vw,var(--shell)))/-2 - var(--gut));
+  border-radius:var(--r-lg);
+  border-top-left-radius:0;border-bottom-left-radius:0;
+}
+.meetup__media img{width:100%;aspect-ratio:4/3;object-fit:cover;transition:transform .8s cubic-bezier(.4,0,.2,1)}
+.meetup__media:hover img{transform:scale(1.04)}
+.meetup h2{font-family:var(--serif);font-weight:500;line-height:1;font-size:clamp(26px,3.6vw,52px)}
+.tags{display:flex;flex-wrap:wrap;gap:8px;margin:18px 0 16px}
+.tag{
+  background:var(--orange);color:#fff;border-radius:999px;
+  padding:.34em 1em;font-family:var(--serif);font-size:clamp(10px,.85vw,13px);letter-spacing:.01em;
+}
+.meetup__meta{font-family:var(--serif);font-size:clamp(12px,1.1vw,16px);color:var(--ink-2)}
+
+.rail{
+  position:relative;margin-top:clamp(20px,2.4vw,30px);
+  /* the rail runs past the shell on the leading edge, as in the design */
+  margin-left:calc((100vw - min(100vw,var(--shell)))/-2 - var(--gut));
+}
+.meetup--flip .rail{
+  margin-left:0;
+  margin-right:calc((100vw - min(100vw,var(--shell)))/-2 - var(--gut));
+}
+.rail__track{padding-left:max(0px,calc((100vw - min(100vw,var(--shell)))/2 + var(--gut) - 60px))}
+.meetup--flip .rail__track{
+  padding-left:2px;
+  padding-right:max(0px,calc((100vw - min(100vw,var(--shell)))/2 + var(--gut) - 60px));
+}
+.rail__track{
+  display:flex;gap:14px;overflow-x:auto;scroll-behavior:smooth;
+  scroll-snap-type:x mandatory;padding:4px 2px 14px;
+  scrollbar-width:none;
+}
+.rail__track::-webkit-scrollbar{display:none}
+.rail__track img{
+  flex:none;width:clamp(180px,24vw,238px);aspect-ratio:3/2;object-fit:cover;
+  border-radius:14px;scroll-snap-align:start;
+  box-shadow:0 12px 30px rgba(26,24,23,.12);
+  transition:transform .4s;
+}
+.rail__track img:hover{transform:translateY(-4px) scale(1.02)}
+.rail__btn{
+  position:absolute;top:calc(50% - 7px);z-index:3;
+  width:42px;height:42px;border-radius:50%;
+  background:rgba(255,255,255,.94);box-shadow:0 8px 22px rgba(26,24,23,.2);
+  display:flex;align-items:center;justify-content:center;
+  transform:translateY(-50%);
+  transition:transform .25s,background .25s;
+}
+.rail__btn:hover{transform:translateY(-50%) scale(1.08);background:#fff}
+.rail__btn--prev{left:-6px}
+.rail__btn--next{right:-6px}
+.rail__btn svg{width:16px;height:16px;fill:var(--orange)}
+
+/* ============================================================
+   CAREERS
+   ============================================================ */
+.roles{display:flex;flex-direction:column;gap:2px}
+.role{
+  background:transparent;border:1px solid transparent;border-radius:14px;
+  overflow:hidden;transition:background .3s,border-color .3s,backdrop-filter .3s;
+}
+.role.is-open{
+  background:rgba(255,255,255,.14);
+  border-color:rgba(255,255,255,.4);
+  backdrop-filter:blur(12px) saturate(140%);
+  -webkit-backdrop-filter:blur(12px) saturate(140%);
+}
+.role:not(.is-open) .role__btn:hover{background:rgba(255,255,255,.09);border-radius:12px}
+.role__btn{
+  width:100%;display:flex;align-items:center;gap:12px;
+  padding:9px clamp(12px,1.6vw,18px);text-align:left;
+  transition:background .25s;
+}
+.role__btn .tri{transition:transform .3s}
+.role.is-open .role__btn .tri{transform:rotate(90deg)}
+.role__btn h2{
+  font-family:var(--serif);font-weight:500;line-height:1.15;
+  font-size:clamp(15px,1.6vw,23px);
+}
+.role__panel{display:grid;grid-template-rows:0fr;transition:grid-template-rows .38s cubic-bezier(.4,0,.2,1)}
+.role.is-open .role__panel{grid-template-rows:1fr}
+.role__panel > div{overflow:hidden}
+.role__inner{padding:0 clamp(12px,1.6vw,18px) 16px}
+.role__label{
+  font-size:clamp(9px,.72vw,11px);font-weight:700;letter-spacing:.14em;text-transform:uppercase;
+  color:rgba(255,255,255,.78);margin-bottom:8px;
+}
+.role__quals li{
+  position:relative;padding-left:20px;margin-bottom:5px;
+  font-size:clamp(11px,.95vw,14px);line-height:1.4;color:rgba(255,255,255,.95);
+}
+.role__quals li::before{
+  content:"";position:absolute;left:1px;top:.3em;
+  width:9px;height:5px;border:1.8px solid var(--orange-bright);
+  border-top:0;border-right:0;transform:rotate(-45deg);
+}
+.role__subject{
+  display:flex;flex-wrap:wrap;align-items:center;gap:.5em;margin-top:11px;
+  font-size:clamp(10px,.8vw,12px);color:rgba(255,255,255,.82);
+}
+.role__subject code{
+  font-family:ui-monospace,SFMono-Regular,Menlo,monospace;font-size:.82rem;
+  background:rgba(0,0,0,.32);padding:.24em .7em;border-radius:6px;color:#fff;
+}
+.role .btn{margin-top:12px}
+
+/* ============================================================
+   REVEAL
+   ============================================================ */
+.reveal{opacity:0;transform:translateY(26px);transition:opacity .7s cubic-bezier(.4,0,.2,1),transform .7s cubic-bezier(.4,0,.2,1)}
+.reveal.is-in{opacity:1;transform:none}
+@media (prefers-reduced-motion:reduce){
+  html{scroll-behavior:auto}
+  *{animation-duration:.01ms!important;transition-duration:.01ms!important}
+  .reveal{opacity:1;transform:none}
+}
+
+/* ============================================================
+   RESPONSIVE
+   ============================================================ */
+@media (max-width:1080px){
+  .strengths__grid{grid-template-columns:1fr}
+  .strengths__art{min-height:260px}
+  .strengths__art img{min-height:260px}
+  .strengths__panel{margin-right:0;border-radius:var(--r-lg);padding-right:clamp(30px,4vw,46px)}
+  .footer-top{grid-template-columns:1fr 1fr 1fr;gap:30px}
+  .footer-top h2{grid-column:1/-1}
+}
+@media (max-width:900px){
+  :root{--header-h:76px}
+  .nav-toggle{display:flex}
+  .nav{
+    position:fixed;inset:var(--header-h) 0 auto;
+    flex-direction:column;align-items:stretch;gap:0;
+    background:rgba(250,249,248,.98);
+    backdrop-filter:blur(16px);
+    -webkit-backdrop-filter:blur(16px);
+    padding:10px var(--gut) 26px;
+    box-shadow:0 20px 40px rgba(0,0,0,.12);
+    transform:translateY(-12px);opacity:0;pointer-events:none;
+    transition:opacity .25s,transform .25s;
+  }
+  .nav-open .nav{transform:none;opacity:1;pointer-events:auto}
+  .nav a,.is-stuck .nav a{color:var(--ink);font-size:1.05rem;padding:14px 0;border-bottom:1px solid var(--line)}
+  .nav a::after{display:none}
+  .header-cta{gap:6px}
+  .header-cta .btn{padding:.7em 1.1em;font-size:.84rem}
+  .brand{gap:9px}
+  .brand img{width:34px}
+  .brand span{font-size:.95rem;white-space:nowrap}
+
+  .cards,.cases{grid-template-columns:1fr;gap:20px}
+  /* Below this width every section stacks, leaving no margin for props to
+     live in — so the loose stickers, the hero figures and the mascot all
+     step aside rather than sit on the copy. */
+  .hero__cut,.page-hero__cut,
+  .st-megaphone,.st-papers,.st-calculator,.st-laptop,
+  .st-pen,.st-bulb,.st-writing{display:none}
+  .cases{margin-top:clamp(40px,6vw,64px)}
+  /* the collage is this section's only visual, so it stays — as a tidy
+     two-up grid instead of a free scatter that would overflow its box */
+  .collage{
+    aspect-ratio:auto;min-height:0;
+    display:grid;grid-template-columns:1fr 1fr;gap:16px;
+    place-items:center;padding:4px 0;
+  }
+  .collage .sticker{
+    position:static;width:auto;max-width:100%;
+    height:clamp(92px,20vw,150px);object-fit:contain;
+  }
+  .approach__grid,.page-hero__grid,.meetup__grid{grid-template-columns:1fr}
+  .meetup--flip .meetup__grid{direction:ltr}
+  .band .shell{justify-content:center}
+  .band__body{max-width:none}
+  .band__bg::after{background:linear-gradient(180deg,rgba(20,16,12,.35),rgba(150,72,12,.72))}
+    .page-hero{min-height:auto;padding-block:calc(var(--header-h) + 60px) 60px}
+  .page-title{margin-bottom:26px}
+}
+@media (max-width:640px){
+  .footer-top{grid-template-columns:1fr 1fr}
+  .hero{min-height:auto;padding-bottom:50px}
+  .hero__stats{padding-top:60px}
+  .rail__btn{display:none}
+}
+@media (max-width:400px){
+  .brand span{display:none}
+}
