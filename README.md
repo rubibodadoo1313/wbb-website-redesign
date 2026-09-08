@@ -1,6 +1,5 @@
 # Work Beyond Borders — local site
 
-Static, three-page build of the Canva redesign. No build step, no dependencies, not deployed.
 
 ## Run it
 
@@ -134,7 +133,6 @@ hidden, and the strengths collage becomes a tidy two-up grid instead of a free s
 that would spill onto the orange panel. This is deliberate — those elements sat on the
 headline, the buttons and the stats row at tablet widths.
 
-## Matching the Canva design
 
 The layout is calibrated against the Canva file rather than eyeballed. Every type
 size in `:root` is expressed as **the design px size / 1162 (the canvas width) as a
