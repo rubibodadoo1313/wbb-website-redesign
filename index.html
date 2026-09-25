@@ -69,6 +69,48 @@
     </div>
   </section>
 
+  <!-- ========== VIDEO EXPLAINER ========== -->
+  <section class="section explainer" id="explainer" aria-labelledby="explainer-title">
+    <div class="shell">
+      <div class="section__head section__head--center explainer__head reveal">
+        <span class="eyebrow">The short version</span>
+        <h2 class="display" id="explainer-title">Seen, heard, <em>remembered</em></h2>
+        <p class="lede">Nineteen seconds on how we turn real voices and real data into brands people notice.</p>
+      </div>
+
+      <div class="explainer__stage reveal">
+        <div class="vplayer">
+          <video src="assets/video/wbb-explainer.mp4"
+                 poster="assets/img/explainer-poster.jpg"
+                 preload="none" playsinline
+                 width="1920" height="1080"
+                 aria-label="Work Beyond Borders explainer video"></video>
+          <img class="vplayer__poster" src="assets/img/explainer-poster.jpg" alt="" aria-hidden="true">
+          <span class="vplayer__scrim" aria-hidden="true"></span>
+
+          <button class="vplayer__play" type="button" aria-label="Play the Work Beyond Borders explainer">
+            <i><svg viewBox="0 0 16 18" aria-hidden="true"><path d="M2 1.2v15.6L15.2 9z"/></svg></i>
+            <b>Watch the explainer &middot; 19 sec</b>
+          </button>
+
+          <button class="vplayer__sound" type="button" hidden>
+            <svg viewBox="0 0 24 24" aria-hidden="true">
+              <path d="M11.5 4.3 6.8 8.2H3.2v7.6h3.6l4.7 3.9z"/>
+              <path d="M15.6 9a4.2 4.2 0 0 1 0 6" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"/>
+              <path d="M18.4 6.2a8 8 0 0 1 0 11.6" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"/>
+            </svg>
+            Tap for sound
+          </button>
+        </div>
+      </div>
+
+      <div class="explainer__foot reveal">
+        <p>Prefer the long version? We&rsquo;ll walk you through it.</p>
+        <a class="btn btn--primary" href="https://mail.google.com/mail/?view=cm&amp;fs=1&amp;tf=1&amp;to=info@workbeyondborder.com" target="_blank" rel="noopener">Book a free strategy call</a>
+      </div>
+    </div>
+  </section>
+
   <!-- ========== WHAT WE DO ========== -->
   <section class="section" id="what-we-do">
     <div class="glow glow--right" aria-hidden="true"></div>
@@ -192,6 +234,36 @@
     </div>
   </section>
 
+  <!-- ========== REELS ========== -->
+  <section class="section reels" aria-labelledby="reels-title">
+    <div class="shell">
+      <div class="reels__top reveal">
+        <div class="section__head">
+          <span class="eyebrow">On the Feed</span>
+          <h2 class="display" id="reels-title">Life <em>beyond borders</em></h2>
+        </div>
+        <div class="reels__nav">
+          <button class="reels__arrow" type="button" data-dir="-1" aria-label="Previous videos">&larr;</button>
+          <button class="reels__arrow" type="button" data-dir="1" aria-label="Next videos">&rarr;</button>
+        </div>
+      </div>
+    </div>
+
+    <div class="reels__track reveal" tabindex="0" aria-label="Video reels">
+      <figure class="reel"><video src="reels/workingbeyondborders_1787567460_3970725928732815155_58349226967.mp4" muted loop playsinline preload="metadata"></video></figure>
+      <figure class="reel"><video src="reels/workingbeyondborders_1786355961_3960563151976312736_58349226967.mp4" muted loop playsinline preload="metadata"></video></figure>
+      <figure class="reel"><video src="reels/workingbeyondborders_1785495697_3953346729369716981_58349226967.mp4" muted loop playsinline preload="metadata"></video></figure>
+      <figure class="reel"><video src="reels/workingbeyondborders_1781684400_3921375258485896896_58349226967.mp4" muted loop playsinline preload="metadata"></video></figure>
+      <figure class="reel"><video src="reels/workingbeyondborders_1780044837_3907621602473458054_58349226967.mp4" muted loop playsinline preload="metadata"></video></figure>
+      <figure class="reel"><video src="reels/workingbeyondborders_1779271505_3901134384497075726_58349226967.mp4" muted loop playsinline preload="metadata"></video></figure>
+      <figure class="reel"><video src="reels/workingbeyondborders_1776160954_3875041214244596963_58349226967.mp4" muted loop playsinline preload="metadata"></video></figure>
+      <figure class="reel"><video src="reels/workingbeyondborders_1773223270_3850398159101448262_58349226967.mp4" muted loop playsinline preload="metadata"></video></figure>
+      <figure class="reel"><video src="reels/workingbeyondborders_1772618467_3845324635634659118_58349226967.mp4" muted loop playsinline preload="metadata"></video></figure>
+      <figure class="reel"><video src="reels/workingbeyondborders_1772186496_3841701038021238031_58349226967.mp4" muted loop playsinline preload="metadata"></video></figure>
+      <figure class="reel"><video src="reels/workingbeyondborders_1770799493_3830066061123554645_58349226967.mp4" muted loop playsinline preload="metadata"></video></figure>
+    </div>
+  </section>
+
   <!-- ========== APPROACH ========== -->
   <section class="section approach">
     <img class="sticker st-pen" src="assets/img/st-pen.png" alt="" aria-hidden="true" loading="lazy">
@@ -271,6 +343,49 @@
     </div>
   </div>
 </footer>
+
+<!-- ========== FIRST-VISIT EXPLAINER POPUP ========== -->
+<div class="vmodal" id="explainer-modal" role="dialog" aria-modal="true"
+     aria-labelledby="explainer-modal-title" aria-hidden="true">
+  <div class="vmodal__dialog">
+
+    <div class="vmodal__bar">
+      <div>
+        <span class="eyebrow">Welcome to Work Beyond Borders</span>
+        <h2 id="explainer-modal-title">Seen, heard, <em>remembered</em></h2>
+      </div>
+      <button class="vmodal__close" type="button" data-close-modal aria-label="Close the video">
+        <svg viewBox="0 0 24 24" aria-hidden="true" stroke-linecap="round"><path d="M6 6l12 12M18 6L6 18"/></svg>
+      </button>
+    </div>
+
+    <div class="vplayer">
+      <video src="assets/video/wbb-explainer.mp4"
+             poster="assets/img/explainer-poster.jpg"
+             preload="none" playsinline
+             width="1920" height="1080"
+             aria-label="Work Beyond Borders explainer video"></video>
+      <img class="vplayer__poster" src="assets/img/explainer-poster.jpg" alt="" aria-hidden="true">
+      <span class="vplayer__scrim" aria-hidden="true"></span>
+
+      <button class="vplayer__play" type="button" aria-label="Play the Work Beyond Borders explainer">
+        <i><svg viewBox="0 0 16 18" aria-hidden="true"><path d="M2 1.2v15.6L15.2 9z"/></svg></i>
+        <b>Watch the explainer &middot; 19 sec</b>
+      </button>
+
+      <button class="vplayer__sound" type="button" hidden>
+        <svg viewBox="0 0 24 24" aria-hidden="true">
+          <path d="M11.5 4.3 6.8 8.2H3.2v7.6h3.6l4.7 3.9z"/>
+          <path d="M15.6 9a4.2 4.2 0 0 1 0 6" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"/>
+          <path d="M18.4 6.2a8 8 0 0 1 0 11.6" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"/>
+        </svg>
+        Tap for sound
+      </button>
+    </div>
+
+    <button class="vmodal__skip" type="button" data-close-modal>Skip and explore the site</button>
+  </div>
+</div>
 
 <script src="assets/js/main.js"></script>
 </body>

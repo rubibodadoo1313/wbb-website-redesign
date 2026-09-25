@@ -16,7 +16,7 @@ Then open <http://localhost:5173/index.html>.
 
 | File | What it is |
 | --- | --- |
-| `index.html` | Landing page — hero, What We Do, case studies, 280M results band, strengths, approach, testimonial, footer |
+| `index.html` | Landing page — hero, **video explainer**, What We Do, case studies, 280M results band, strengths, **reels**, approach, testimonial, footer |
 | `activities.html` | Davao, Iloilo and Gensan meetups, each with a scrollable photo rail |
 | `careers.html` | Six roles in an accordion, each with qualifications, subject line and an apply button |
 
@@ -57,8 +57,11 @@ result back so you can check it.
 ```
 index.html  activities.html  careers.html
 assets/css/styles.css     all styling, design tokens at the top
-assets/js/main.js         sticky header, mobile nav, accordion, photo rails, scroll reveals
+assets/js/main.js         sticky header, mobile nav, accordion, photo rails, scroll reveals, video explainer + popup, reels
 assets/img/               web-optimised images (resized + compressed)
+assets/video/             web-optimised video (see Video explainer)
+reels/                    the 11 home-page reels (see Reels)
+wbb video explainer/      the original explainer export (source, not served, not in git)
 new imgs/                 your original, full-resolution source images (untouched)
 landingpage.psd           the hero artwork the landing page hero is built from
 ```
@@ -159,6 +162,65 @@ rows being plain triangle-and-name until one is opened.
 
 The hero photo carries `filter: brightness(1.26)`. The supplied `bg.png` is genuinely
 dark (mean RGB ~53); Canva lifts it in the design, so the CSS does the same.
+
+## Video explainer
+
+The explainer plays in two places, both driven by the same file and the same code
+(`wirePlayer` in `assets/js/main.js`):
+
+1. **A popup on the first visit.** 1.2s after the page settles, a dialog opens over
+   the site with the video already rolling. It closes on the X, the Esc key, a click
+   on the dark surround, or *Skip and explore the site*.
+2. **A section on the home page**, between the hero and What We Do, so the video is
+   still there once the popup is gone (or for anyone who never saw it).
+
+### Things worth knowing
+
+- **It only pops up once per browser.** The flag is `wbb:explainer-seen` in
+  `localStorage`, written the moment the popup opens. To see it again, clear site data
+  or run `localStorage.removeItem('wbb:explainer-seen')` in the console.
+- **Sound.** The popup asks to start *with* sound. Most browsers refuse audio that no
+  click asked for, so it falls back to a muted run and shows a **Tap for sound** button.
+  Clicking play in the page section is a real click, so that one always has sound.
+- **Reduced motion.** If the visitor's system asks for less motion, the popup still
+  opens but waits behind its play button instead of auto-rolling.
+- **The video is re-encoded for the web**, not served from `wbb video explainer/`:
+
+  | | Source | Served |
+  | --- | --- | --- |
+  | File | `wbb video explainer/1st Version.mp4` | `assets/video/wbb-explainer.mp4` |
+  | Size | 7.8 MB | 3.3 MB |
+  | Layout | metadata at the end | `faststart` — metadata first |
+
+  The `faststart` part matters: in the source file the browser had to pull all 7.8 MB
+  before it could show a frame, which would have left the popup blank. Re-encoded at
+  CRF 23 the text stays as crisp as the original.
+
+- **The poster** (`assets/img/explainer-poster.jpg`) is the closing brand frame at
+  16s, so the box is never empty while the video streams in.
+
+To regenerate either after a new cut of the video:
+
+```bash
+ffmpeg -i "wbb video explainer/1st Version.mp4" -c:v libx264 -crf 23 -preset slow   -pix_fmt yuv420p -c:a aac -b:a 128k -movflags +faststart assets/video/wbb-explainer.mp4
+ffmpeg -ss 16 -i "wbb video explainer/1st Version.mp4" -frames:v 1 assets/img/explainer-poster.jpg
+```
+
+## Reels
+
+A horizontal strip of short videos on the home page, straight after *More than an agency*.
+
+- **Files** live in `reels/` and are listed one by one in `index.html` (newest first).
+  To add or remove a reel, add or delete its `<figure class="reel">` line there.
+- **Mixed shapes are fine.** Every card is the same height and takes its width from the
+  video itself, so portrait and landscape reels both show uncropped. On phones the
+  landscape ones shrink to fit the screen.
+- **Playback.** Reels play muted while they are on screen and pause when they scroll
+  away. Tapping a reel pauses or resumes it. The corner button turns sound on for that
+  reel only. Visitors who ask for reduced motion get no autoplay.
+- **Weight.** The folder is ~19 MB. Each video only loads its metadata until it is
+  needed, but the two largest (5.3 MB and 3.8 MB) are worth compressing if the section
+  feels slow on mobile data.
 
 ## Notes
 
