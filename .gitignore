@@ -10,6 +10,7 @@ wbb video explainer/
 
 # Local editor / tooling config
 .claude/
+.vs/
 
 # OS junk
 Thumbs.db

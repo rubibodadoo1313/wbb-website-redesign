@@ -22,13 +22,56 @@ Then open <http://localhost:5173/index.html>.
 
 Every page shares the header (with the **Contact us** button) and the footer.
 
+## Contact form
+
+The **Contact us** button in the header of all three pages opens a popup with the
+form: name, email, phone (optional) and *What can we help you with?*
+
+Delivery is **Netlify Forms**, so this only works once the site is deployed to
+Netlify. Netlify finds the form by scraping the deployed HTML, which is what these
+attributes on the `<form>` are for:
+
+```html
+<form name="contact" method="POST" data-netlify="true" data-netlify-honeypot="botcheck">
+  <input type="hidden" name="form-name" value="contact">
+```
+
+The same form appears on all three pages under one name, so Netlify records them as a
+single form called **contact**.
+
+### Turning it on after the first deploy
+
+Netlify does not know where to send submissions until you tell it:
+
+1. Deploy the site to Netlify.
+2. **Site settings → Forms → Form notifications → Add notification → Email notification**
+3. Set the address to `itwbb@gmail.com` and pick the **contact** form.
+
+Submissions are also listed in the Netlify dashboard under **Forms**, so nothing is
+lost if the email notification is ever misconfigured. The free tier covers 100
+submissions a month.
+
+### What happens when it cannot send
+
+`fetch('/')` has nothing to answer it on a local preview, or if Netlify is unreachable.
+Rather than lose the enquiry, the catch opens a **Gmail compose window to
+`itwbb@gmail.com`** with every answer already filled in, and says so on screen. The
+popup stays open so nothing typed is thrown away.
+
+That is why the form appears "broken" when you open it locally — it is the fallback
+doing its job. Deployed to Netlify, it sends silently.
+
+### Spam
+
+`botcheck` is a hidden checkbox that people never see and bots tick. Netlify drops any
+submission where it is filled, and the JS bails out too.
+
 ## Email links
 
-All email buttons open a **Gmail compose window** in a new tab, addressed to
+The remaining email buttons open a **Gmail compose window** in a new tab, addressed to
 `info@workbeyondborder.com`.
 
-- **Contact us** (header, on all three pages), plus *Book a free strategy call*,
-  *Inquire now*, *Get started* and the footer *Contact* link — recipient only, no subject.
+- *Inquire now*, *Get started* and the footer *Contact* link — recipient only, no subject.
 - **Apply for this role** (careers) — recipient, the role's subject line, and a full
   draft cover note. The role name is filled into the opening sentence automatically
   ("applying for the Account Manager position"), so each of the six buttons carries its
@@ -57,7 +100,8 @@ result back so you can check it.
 ```
 index.html  activities.html  careers.html
 assets/css/styles.css     all styling, design tokens at the top
-assets/js/main.js         sticky header, mobile nav, accordion, photo rails, scroll reveals, video explainer + popup, reels
+assets/js/main.js         sticky header, mobile nav, accordion, photo rails, scroll reveals, video explainer + popup, reels, contact form
+netlify.toml              tells Netlify to publish the repo root as-is (no build step)
 assets/img/               web-optimised images (resized + compressed)
 assets/video/             web-optimised video (see Video explainer)
 reels/                    the 11 home-page reels (see Reels)
@@ -70,13 +114,12 @@ Images in `assets/img/` are generated from `new imgs/`: photos resized and saved
 progressive JPEG, cut-out people and props kept as transparent PNG. Re-drop a
 replacement into `assets/img/` under the same filename to swap any picture.
 
-The footer on each page uses a cut-out of the team (`footer asset 1/2/3`) standing on a
-warm gradient, with the frosted panel pulled up over their lower half by a negative
-margin. The art is **full-bleed** — `width:100vw` with `margin-inline:calc(50% - 50vw)`
+The footer on each page uses a photo of the team (`footer asset 1/2/3`), with the
+frosted panel pulled up over its lower half by a negative margin. The art is **full-bleed** — `width:100vw` with `margin-inline:calc(50% - 50vw)`
 to break out of the shell — because capped at the content width it read as a photo
 floating in the middle of the footer. The overlap is expressed in `vw` so it tracks the
 image height (which is now a fraction of the viewport width) and keeps a constant bite
-at any size, and a mask gradient dissolves the cut-out bottom edge, which the panel no
+at any size, and a mask gradient dissolves the photo's bottom edge, which the panel no
 longer fully covers now that the art is wider than it is.
 
 The footer `<img>` tags carry explicit `width`/`height`. Without them the browser
@@ -84,14 +127,22 @@ reserves no space for a lazy-loaded image, so the page height is wrong until it
 arrives — which truncated the footer entirely in full-page captures and would cause
 layout shift for a real visitor.
 
-`landing page asset 5` is the cut-out in *Our approach*.
+`landing page asset 5` is the cut-out in *Our approach*. `landing page asset 6` is the
+photo behind the **280M** results band (`results-band.jpg`).
+
+**The footer art is a full photo, not a cut-out.** It used to be the team cut out of
+their background and standing on a warm gradient. `footer asset 1/2/3` are now supplied
+with their backgrounds intact and used as-is — the trees, the garden and the diner
+floor are meant to be there. Resize to 1600px wide and save as progressive JPEG;
+nothing else is done to them. Do **not** run a background remover over them.
 
 ### The hero cut-outs
 
-The four people in the landing hero are positioned to match the layer geometry in
-`landingpage.psd` — two crowding in from the left edge, two from the right. They're
-sized by **height** (`.hero__cut--tl / --bl / --tr / --br` in the stylesheet) so each
-keeps its own proportions at any screen width. They fade back on tablets and are hidden
+The people in the landing hero are positioned to match the layer geometry in
+`landingpage.psd`. They're sized by **height** (`.hero__cut--tl / --bl / --br` in the
+stylesheet) so each keeps its own proportions at any screen width. There were four;
+`landing page asset 4` was deleted from the source folder, so the top-right figure and
+its `.hero__cut--tr` rules came out with it and three remain. They fade back on tablets and are hidden
 on phones, where four people would crowd out the headline.
 
 `mascot.png` (from `careerspage asset.png`) is the WBB giraffe, sitting at the

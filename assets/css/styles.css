@@ -211,7 +211,6 @@ input{font:inherit}
   position:absolute;z-index:1;width:auto;pointer-events:none;
   filter:drop-shadow(0 22px 40px rgba(0,0,0,.3));
 }
-.hero__cut--tr{right:-9%;top:9%;height:55%}
 .hero__cut--br{right:-4%;top:45%;height:53%}
 .hero__cut--tl{left:-4%;top:30%;height:56%}
 .hero__cut--bl{left:-6%;top:53%;height:44%}
@@ -220,8 +219,7 @@ input{font:inherit}
    PSD frame, so the four figures close in on the headline, the buttons and the
    stats row. Shrink them and push them back out to the edges. */
 @media (max-width:1320px) and (min-width:901px){
-  .hero__cut--tr{right:-11%;top:5%;height:50%}
-  .hero__cut--br{right:-7%;top:32%;height:52%}
+    .hero__cut--br{right:-7%;top:32%;height:52%}
   .hero__cut--tl{left:-8%;top:21%;height:52%}
   .hero__cut--bl{left:-8%;top:38%;height:46%}
 }
@@ -229,8 +227,7 @@ input{font:inherit}
 /* Tightest desktop band: the headline column takes almost the whole width
    here, so the outer two step back further still. */
 @media (max-width:1100px) and (min-width:901px){
-  .hero__cut--tr{right:-15%;top:6%;height:44%}
-  .hero__cut--br{right:-11%;top:33%;height:46%}
+    .hero__cut--br{right:-11%;top:33%;height:46%}
   .hero__cut--tl{left:-13%;top:23%;height:45%}
   .hero__cut--bl{left:-12%;top:39%;height:41%}
 }
@@ -518,6 +515,10 @@ input{font:inherit}
 .quote__mark{
   position:absolute;left:50%;top:50%;translate:-50% -50%;
   width:min(58vw,430px);opacity:.16;pointer-events:none;
+  /* The section is shorter than the mark is tall, and .quote clips its
+     overflow — so cap the height and let the width follow, or the logo loses
+     its top and bottom to the section edges. */
+  max-height:100%;
 }
 .quote blockquote{
   position:relative;font-family:var(--serif);font-weight:500;
@@ -526,12 +527,19 @@ input{font:inherit}
 .quote blockquote em{font-style:italic;display:block}
 .quote figcaption{position:relative;margin-top:16px;color:var(--ink-2);font-size:clamp(11px,.88vw,13px)}
 
+/* The footer art now meets the section above it directly, so on Activities the
+   last meetup's own bottom padding would reopen the gap under the photo rail.
+   Home and Careers keep theirs — there the padding sits behind the quote and
+   the hero photo, where it reads as breathing room rather than dead space. */
+main > .meetup:last-child{padding-bottom:0}
+
 /* ============================================================
    FOOTER
    ============================================================ */
 .site-footer{
   position:relative;isolation:isolate;overflow:hidden;
-  padding-block:clamp(30px,4vw,54px) clamp(40px,5vw,64px);
+  /* no top padding: the art is meant to meet the quote section directly */
+  padding-block:0 clamp(40px,5vw,64px);
   background:
     radial-gradient(115% 80% at 50% 0%,rgba(255,150,20,.18),transparent 62%),
     linear-gradient(180deg,var(--paper) 0,#eeeae4 100%);
@@ -997,4 +1005,114 @@ html.vmodal-open,html.vmodal-open body{overflow:hidden}
 }
 @media (max-width:400px){
   .brand span{display:none}
+}
+
+/* ============================================================
+   CONTACT MODAL
+   Opened by the header "Contact us" button on every page.
+   Shares the surround/scroll-lock behaviour of the video popup.
+   ============================================================ */
+.cmodal{
+  position:fixed;inset:0;z-index:130;
+  display:grid;place-items:center;
+  padding:clamp(14px,4vw,40px);
+  background:rgba(20,16,14,.74);
+  -webkit-backdrop-filter:blur(10px);backdrop-filter:blur(10px);
+  opacity:0;visibility:hidden;
+  transition:opacity .34s ease,visibility 0s linear .34s;
+}
+.cmodal.is-open{opacity:1;visibility:visible;transition-delay:0s,0s}
+
+.cmodal__dialog{
+  position:relative;
+  width:min(520px,100%);
+  max-height:calc(100vh - clamp(28px,8vw,80px));
+  overflow-y:auto;overflow-x:clip;
+  background:linear-gradient(180deg,#fffefb,#faf7f0);
+  border:1px solid rgba(255,255,255,.7);
+  border-radius:var(--r-lg);
+  padding:clamp(26px,3.4vw,40px);
+  box-shadow:0 40px 90px rgba(0,0,0,.4);
+  transform:translateY(20px) scale(.97);
+  transition:transform .42s cubic-bezier(.22,1,.36,1);
+}
+.cmodal.is-open .cmodal__dialog{transform:none}
+
+.cmodal__close{
+  position:absolute;top:14px;right:14px;
+  display:grid;place-items:center;
+  width:38px;height:38px;border-radius:50%;
+  background:rgba(26,24,23,.07);color:var(--ink-2);
+  transition:background .25s,color .25s,transform .25s;
+}
+.cmodal__close:hover{background:var(--orange);color:#fff;transform:rotate(90deg)}
+.cmodal__close svg{width:15px;height:15px;stroke:currentColor;stroke-width:2.2;fill:none}
+
+.cmodal__head{text-align:center;margin-bottom:clamp(18px,2.4vw,26px)}
+.cmodal__head img{width:52px;height:auto;margin:0 auto 12px}
+.cmodal__head h2{
+  font-family:var(--serif);font-weight:500;line-height:1;
+  font-size:clamp(26px,3vw,38px);margin-top:6px;
+}
+.cmodal__head h2 em{font-style:italic}
+.cmodal__sub{
+  margin-top:10px;color:var(--ink-2);
+  font-size:var(--fs-body);line-height:1.45;
+}
+
+/* ---------- the form ---------- */
+.cform{display:grid;gap:14px}
+.cform__row{display:grid;gap:6px}
+.cform label{
+  font-size:clamp(11px,.85vw,13px);font-weight:600;
+  letter-spacing:.06em;text-transform:uppercase;color:var(--ink-2);
+}
+.cform label .opt{font-weight:500;text-transform:none;letter-spacing:0;color:var(--ink-3)}
+.cform input:not(.sr-only),.cform textarea{
+  width:100%;
+  padding:.78em .95em;
+  border:1px solid rgba(26,24,23,.18);
+  border-radius:12px;
+  background:#fff;color:var(--ink);
+  font-size:var(--fs-body);font-family:inherit;
+  transition:border-color .2s,box-shadow .2s;
+}
+.cform textarea{min-height:104px;resize:vertical;line-height:1.5}
+.cform input::placeholder,.cform textarea::placeholder{color:var(--ink-3)}
+.cform input:not(.sr-only):focus,.cform textarea:focus{
+  outline:none;border-color:var(--orange);
+  box-shadow:0 0 0 3px rgba(209,74,34,.14);
+}
+.cform input[aria-invalid="true"],.cform textarea[aria-invalid="true"]{
+  border-color:#c0392b;box-shadow:0 0 0 3px rgba(192,57,43,.12);
+}
+.cform__err{
+  min-height:0;font-size:clamp(11px,.85vw,12.5px);color:#c0392b;
+}
+.cform__err:empty{display:none}
+
+.cform__submit{
+  justify-content:center;width:100%;margin-top:4px;
+  padding-block:.95em;
+}
+.cform__submit[disabled]{opacity:.6;pointer-events:none}
+
+.cform__status{
+  margin-top:2px;text-align:center;
+  font-size:var(--fs-body);line-height:1.45;color:var(--ink-2);
+}
+.cform__status:empty{display:none}
+.cform__status.is-ok{color:#1e7a4d}
+.cform__status.is-bad{color:#c0392b}
+
+/* the popup owns the viewport while it is open */
+html.cmodal-open,html.cmodal-open body{overflow:hidden}
+
+@media (max-width:640px){
+  .cmodal__dialog{padding:24px 20px 22px}
+  .cmodal__head img{width:44px}
+}
+@media (prefers-reduced-motion:reduce){
+  .cmodal,.cmodal__dialog{transition:none}
+  .cmodal__dialog{transform:none}
 }

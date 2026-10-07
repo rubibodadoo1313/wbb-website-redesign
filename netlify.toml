@@ -1,0 +1,5 @@
+# Plain static site: no build step, publish the repo as-is.
+# The contact form is picked up automatically from the deployed HTML
+# (see the <form name="contact" data-netlify="true"> in each page).
+[build]
+  publish = "."
