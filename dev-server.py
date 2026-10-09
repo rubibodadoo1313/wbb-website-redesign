@@ -2,9 +2,11 @@
 
 The pages are flat .html files but their public addresses have no extension,
 which `python -m http.server` and VS Code's Live Server both get wrong: they
-404 on /activities and happily serve /activities.html. This mirrors the two
-rules in netlify.toml instead, so clicking around locally matches the
-deployed site.
+404 on /activities. GitHub Pages resolves /activities to activities.html, so
+this does the same, and clicking around locally matches the deployed site.
+
+GitHub Pages serves .html addresses too rather than redirecting them away,
+and it has no redirect rules to change that, so neither does this.
 
     python dev-server.py [port]        # default 5173
 """
@@ -19,14 +21,6 @@ ROOT = os.path.dirname(os.path.abspath(__file__))
 class CleanURLHandler(SimpleHTTPRequestHandler):
     def do_GET(self):
         path = self.path.split('?', 1)[0].split('#', 1)[0]
-
-        # the old addresses are retired, exactly as in netlify.toml
-        if path.endswith('.html'):
-            target = '/' if path == '/index.html' else path[:-len('.html')]
-            self.send_response(301)
-            self.send_header('Location', target)
-            self.end_headers()
-            return
 
         # /activities has no file behind it; activities.html does
         if path != '/' and '.' not in path.rsplit('/', 1)[-1]:
