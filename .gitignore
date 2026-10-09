@@ -17,3 +17,10 @@ Thumbs.db
 ehthumbs.db
 Desktop.ini
 .DS_Store
+
+# Source case-study material: the original 31MB creator videos, the logo and
+# the .docx. The site serves the web-optimised copies in assets/.
+Eve sleep case study/
+
+# Impeccable working state (review captures, surface briefs)
+.impeccable/

@@ -254,6 +254,8 @@ input{font:inherit}
 .section__head--center{margin-inline:auto;text-align:center}
 .section__head .eyebrow{display:block;margin-bottom:12px}
 .section__head .lede{margin-top:14px}
+#case-studies .section__head{margin-bottom:0}
+#case-studies{padding-block:clamp(32px,4vw,54px)}
 
 .glow{
   position:absolute;z-index:0;pointer-events:none;border-radius:50%;
@@ -348,16 +350,27 @@ input{font:inherit}
    the lede, nor down onto the "Case Study" tags. */
 .cases{
   position:relative;
-  --prop:clamp(104px,13vw,182px);
-  /* A rotated element's footprint is its diagonal, not its height, and the
-     float adds a few more pixels on top — hence the 1.3 rather than a bare
-     var(--prop). Under-budget this and the props creep onto the lede. */
-  margin-top:calc(var(--prop) * 1.3 + clamp(30px,3.4vw,48px));
+  --prop:clamp(78px,9vw,126px);
+  /* The two props above the card no longer buy themselves a clear band: they
+     hang into the heading's own row, in the margin left of it and the empty
+     space right of it. So the gap here is just a gap, and the card sits up
+     under the lede where the design puts it. */
+  margin-top:clamp(22px,2.6vw,38px);
 }
-.st-megaphone {left:-11%;bottom:100%;margin-bottom:10px;width:auto;height:var(--prop);rotate:-14deg;--float-dur:8.5s}
-.st-papers    {left:29%;bottom:100%;margin-bottom:18px;width:auto;height:calc(var(--prop) * .8);rotate:6deg;--float:9px;--float-dur:7.4s;--float-delay:-2.1s}
+/* Flush to the page's left edge rather than a share of the card's width: it
+   now sits beside the heading, so what it has to fit into is the page margin,
+   and a percentage offset shrinks that margin away exactly when it matters. */
+.st-megaphone {left:calc((var(--shell) - 100vw) / 2 - var(--gut) + 4px);bottom:100%;margin-bottom:10px;width:auto;height:var(--prop);rotate:-14deg;--float-dur:8.5s}
+/* right of the 470px heading block, not under it */
+.st-papers    {right:3%;bottom:100%;margin-bottom:clamp(18px,2.4vw,34px);width:auto;height:calc(var(--prop) * .8);rotate:6deg;--float:9px;--float-dur:7.4s;--float-delay:-2.1s}
 .st-calculator{left:2%;top:100%;margin-top:22px;width:clamp(88px,11vw,144px);rotate:-18deg;--float:6px;--float-dur:6.6s;--float-delay:-1.2s}
 .st-laptop    {right:-9%;top:100%;margin-top:-18px;width:clamp(110px,15vw,196px);rotate:8deg;--float:8px;--float-dur:9.2s;--float-delay:-3.4s}
+
+@media (max-width:1400px){
+  /* below this the margin is narrower than the megaphone, so it would sit on
+     the heading it is meant to flank; the other three props still have room */
+  .st-megaphone{display:none}
+}
 
 /* strengths — the props stand in for the photo, as they do in the design */
 .collage{position:relative;aspect-ratio:1/1.06;min-height:300px}
@@ -924,6 +937,435 @@ html.vmodal-open,html.vmodal-open body{overflow:hidden}
   .vmodal,.vmodal__dialog{transition:none}
   .vmodal__dialog{transform:none}
 }
+
+/* ============================================================
+   CASE STUDY — Eve Sleep
+   The page is the campaign's causal chain: each link is a passage
+   that earns the next, so the numbering carries the argument and
+   is not decoration.
+   ============================================================ */
+
+/* ---------- the single card on the home page ---------- */
+.case-feature{
+  /* .cases is still the three-column grid the old cards used, so the single
+     feature card has to claim the whole track or it renders a third wide. */
+  grid-column:1 / -1;
+  position:relative;z-index:1;
+  display:grid;grid-template-columns:1.15fr 1fr;
+  gap:clamp(20px,2.6vw,40px);align-items:center;
+  background:var(--cream);border-radius:var(--r-lg);
+  padding:clamp(20px,2.4vw,36px);
+  text-decoration:none;color:inherit;
+  box-shadow:0 18px 44px rgba(26,24,23,.08);
+  transition:transform .4s cubic-bezier(.4,0,.2,1),box-shadow .4s;
+}
+.case-feature:hover{transform:translateY(-6px);box-shadow:0 34px 70px rgba(26,24,23,.16)}
+.case-feature__client{margin-bottom:12px}
+.case-feature__client img{height:34px;width:auto}
+.case-feature__client span{
+  font-size:clamp(10px,.94vw,12px);font-weight:600;letter-spacing:.14em;
+  text-transform:uppercase;color:var(--ink-2);
+}
+.case-feature h3{
+  font-family:var(--serif);font-weight:500;line-height:1.02;
+  font-size:clamp(26px,3.4vw,46px);letter-spacing:-.01em;
+}
+.case-feature h3 em{font-style:italic}
+.case-feature p{margin-top:12px;color:var(--ink-2);font-size:var(--fs-body);line-height:1.5;max-width:46ch}
+.case-feature__go{
+  display:inline-flex;align-items:center;gap:10px;margin-top:18px;
+  font-weight:600;font-size:var(--fs-btn);color:var(--orange-deep);
+}
+.case-feature__go svg{width:18px;height:12px;flex:none;transition:transform .3s cubic-bezier(.4,0,.2,1)}
+.case-feature:hover .case-feature__go svg{transform:translateX(5px)}
+
+/* the figures sit as a ruled column, not as tiles */
+.case-feature__figures{display:grid;gap:0;border-top:1px solid rgba(26,24,23,.16)}
+.case-feature__figures div{
+  display:flex;align-items:baseline;justify-content:space-between;gap:16px;
+  padding:clamp(8px,.95vw,13px) 0;border-bottom:1px solid rgba(26,24,23,.16);
+}
+.case-feature__figures b{
+  font-family:var(--serif);font-weight:500;font-size:clamp(24px,2.9vw,40px);
+  line-height:1;letter-spacing:-.02em;font-variant-numeric:tabular-nums;
+}
+.case-feature__figures span{font-size:clamp(11px,.95vw,13px);color:var(--ink-2);text-align:right}
+
+@media (max-width:860px){
+  .case-feature{grid-template-columns:1fr;gap:28px}
+}
+
+/* ============================================================
+   THE CASE STUDY PAGE
+   ============================================================ */
+
+/* ---------- opening statement ---------- */
+/* The opening carries the courtyard photograph, the way the home hero does, so
+   everything in it is set for light-on-dark. */
+.cs-open{
+  position:relative;isolation:isolate;color:#fff;
+  /* the ground the light type is actually set against, so the section still
+     reads if the photograph never arrives */
+  background:#14110b;
+  margin-inline:calc(50% - 50vw);
+  padding-block:calc(var(--header-h) + clamp(52px,7vw,104px)) clamp(56px,7vw,104px);
+  overflow:hidden;
+}
+.cs-open > .shell{position:relative;z-index:1}
+.cs-open__bg{position:absolute;inset:0;z-index:-1}
+.cs-open__bg img{width:100%;height:100%;object-fit:cover;object-position:58% 46%}
+/* Darkened hard on the left, where the headline and the ratio line sit, and
+   released toward the right so the mirror and the planting stay readable. */
+.cs-open__bg::after{
+  content:"";position:absolute;inset:0;
+  background:
+    linear-gradient(90deg, rgba(14,11,9,.88) 0%, rgba(14,11,9,.74) 42%, rgba(16,12,9,.42) 74%, rgba(18,13,9,.34) 100%),
+    linear-gradient(180deg, rgba(10,8,6,.62) 0%, transparent 34%);
+}
+.cs-client{margin-bottom:clamp(22px,3vw,38px)}
+.cs-client img{height:clamp(30px,3.4vw,44px);width:auto}
+.cs-client span{
+  font-size:clamp(10px,.94vw,12px);font-weight:600;letter-spacing:.14em;
+  text-transform:uppercase;color:var(--ink-2);
+}
+.cs-statement{
+  font-family:var(--serif);font-weight:500;line-height:.98;letter-spacing:-.018em;
+  font-size:clamp(38px,7.4vw,104px);max-width:14ch;
+  text-shadow:0 4px 34px rgba(0,0,0,.5);
+}
+.cs-statement em{font-style:italic;color:var(--orange-bright)}
+
+/* the ratio line: one claim, not a tile grid */
+.cs-ratio{
+  display:flex;align-items:baseline;flex-wrap:wrap;gap:clamp(10px,1.4vw,22px);
+  margin-top:clamp(30px,4vw,58px);
+  font-family:var(--serif);font-weight:500;line-height:1;
+}
+.cs-ratio b{font-size:clamp(46px,8.2vw,118px);letter-spacing:-.035em;font-variant-numeric:tabular-nums;text-shadow:0 4px 30px rgba(0,0,0,.45)}
+.cs-ratio i{font-style:normal;font-size:clamp(16px,2vw,28px);color:rgba(255,255,255,.76)}
+.cs-ratio s{text-decoration:none;font-size:clamp(26px,4vw,56px);color:rgba(255,255,255,.6);font-variant-numeric:tabular-nums}
+.cs-ratio small{
+  flex-basis:100%;font-family:var(--sans);font-weight:400;
+  font-size:var(--fs-body);color:rgba(255,255,255,.88);line-height:1.5;max-width:52ch;margin-top:10px;
+}
+
+/* ---------- the chain ---------- */
+.cs-chain{position:relative;padding-block:clamp(40px,5vw,72px)}
+.cs-link{
+  position:relative;
+  padding-block:clamp(38px,5vw,76px);
+  border-bottom:1px solid rgba(26,24,23,.14);
+}
+.cs-link:last-child{border-bottom:0}
+.cs-link__grid{display:grid;grid-template-columns:4.5rem minmax(0,1fr);gap:clamp(18px,2.6vw,40px)}
+/* the number is the argument's sequence, so it is set like a figure */
+.cs-link__n{
+  font-family:var(--serif);font-weight:500;font-size:clamp(20px,2.2vw,30px);
+  line-height:1;color:var(--orange-deep);font-variant-numeric:tabular-nums;
+  position:relative;
+}
+.cs-link__n::after{
+  content:"";position:absolute;left:calc(50% - .5px);top:calc(100% + 14px);bottom:0;
+  width:1px;background:rgba(209,74,34,.3);
+}
+.cs-link:last-child .cs-link__n::after{display:none}
+.cs-link h2{
+  font-family:var(--serif);font-weight:500;line-height:1.02;letter-spacing:-.015em;
+  font-size:clamp(27px,4.2vw,58px);max-width:18ch;
+}
+.cs-link h2 em{font-style:italic}
+.cs-link__body{margin-top:clamp(14px,1.8vw,22px);max-width:62ch;min-width:0}
+.cs-link__body p{color:var(--ink-2);font-size:var(--fs-lede);line-height:1.55}
+.cs-link__body p + p{margin-top:14px}
+
+/* inline figures inside a passage — reads as prose, not a dashboard */
+.cs-inline{
+  display:flex;flex-wrap:wrap;gap:clamp(20px,3.4vw,54px);
+  margin-top:clamp(24px,3vw,38px);
+}
+.cs-inline div{display:flex;flex-direction:column;gap:4px}
+.cs-inline b{
+  font-family:var(--serif);font-weight:500;font-size:clamp(30px,4.2vw,58px);
+  line-height:1;letter-spacing:-.025em;font-variant-numeric:tabular-nums;
+}
+.cs-inline span{font-size:clamp(11px,.95vw,13px);color:var(--ink-2)}
+
+/* ...and the same figures set as one orange bar where the passage needs the
+   numbers to land as a single claim rather than four separate ones. The bar
+   is --orange-deep, not --orange: white on #d14a22 is 4.46:1, which the 12px
+   labels would fail, while #b93d18 clears AA at 5.6:1 and reads identically. */
+.cs-inline--bar{
+  background:var(--orange-deep);color:#fff;
+  border-radius:999px;
+  padding:clamp(16px,1.9vw,26px) clamp(24px,3.2vw,46px);
+  gap:clamp(18px,3vw,56px);
+  box-shadow:0 18px 40px rgba(185,61,24,.22);
+}
+.cs-inline--bar b{color:#fff;font-size:clamp(26px,3.4vw,46px)}
+.cs-inline--bar span{
+  color:rgba(255,255,255,.9);
+  letter-spacing:.08em;text-transform:uppercase;font-weight:600;
+}
+
+/* a heading promoted into the orange itself — used once, where the line is
+   the section's whole thesis. The radius is the pill's, squared off enough
+   to hold three lines of Playfair without looking like a button. */
+.cs-slab{
+  background:var(--orange-deep);color:#fff;
+  border-radius:var(--r-lg);
+  padding:clamp(22px,2.6vw,42px) clamp(26px,3.4vw,52px);
+  /* the cap keeps the measure near 19 characters, so the line breaks fall
+     where the heading's sense does, and leaves the iMac somewhere to sit */
+  max-width:min(100%,52rem);
+  box-shadow:0 22px 48px rgba(185,61,24,.2);
+}
+.cs-link h2.cs-slab{max-width:min(100%,52rem)}
+
+/* props for links 02 and 03 — anchored to the link box, so they ride the
+   section's own height rather than a fixed offset down the page */
+.cs-prop{filter:drop-shadow(0 14px 26px rgba(26,24,23,.16))}
+/* The two left-hand props stand in the page margin, not in a share of the
+   link's width: a percentage offset shrinks with the column exactly when the
+   margin it has to fit into is shrinking too, and they end up on the number
+   and the copy. This calc is the distance from the link's edge to the
+   window's, so they sit flush to the left of the page at any width. */
+.cs-prop--mega  {left:calc((var(--shell) - 100vw) / 2 - var(--gut) + 6px);top:-2%;width:clamp(104px,9vw,132px);rotate:-12deg;--float:8px;--float-dur:8.4s}
+.cs-prop--bulb  {right:-3%;top:2%;width:clamp(86px,10.5vw,138px);rotate:5deg;--float:9px;--float-dur:7.2s;--float-delay:-2.3s}
+.cs-prop--calc  {left:calc((var(--shell) - 100vw) / 2 - var(--gut) + 42px);bottom:4%;width:clamp(100px,12.5vw,162px);rotate:-14deg;--float:6px;--float-dur:6.8s;--float-delay:-1.4s}
+.cs-prop--papers{right:7%;bottom:3%;width:clamp(78px,9.5vw,124px);rotate:8deg;--float:9px;--float-dur:9s;--float-delay:-3.6s}
+.cs-prop--imac  {right:1%;top:38%;width:clamp(150px,20vw,278px);rotate:2deg;--float:7px;--float-dur:9.6s;--float-delay:-2.8s}
+
+/* ---------- creator rail ---------- */
+.cs-rail{
+  --edge:max(var(--gut),calc((100vw - var(--shell))/2 + var(--gut)));
+  margin-top:clamp(28px,3.4vw,46px);
+  margin-inline:calc(50% - 50vw);
+  display:flex;gap:clamp(12px,1.6vw,20px);
+  padding:4px var(--edge) 20px;
+  overflow-x:auto;scroll-snap-type:x mandatory;scroll-behavior:smooth;scrollbar-width:none;
+}
+.cs-rail::-webkit-scrollbar{display:none}
+.cs-creator{
+  position:relative;flex:none;width:clamp(186px,21vw,258px);aspect-ratio:9/16;
+  border-radius:var(--r-md);overflow:hidden;background:var(--ink);
+  scroll-snap-align:start;cursor:pointer;
+  box-shadow:0 16px 36px rgba(26,24,23,.18);
+  transition:transform .35s cubic-bezier(.4,0,.2,1);
+}
+.cs-creator:hover{transform:translateY(-5px)}
+.cs-creator video,.cs-creator img{width:100%;height:100%;object-fit:cover;display:block}
+.cs-creator video{position:absolute;inset:0;opacity:0;transition:opacity .3s}
+.cs-creator.is-live video{opacity:1}
+.cs-creator__play{
+  position:absolute;inset:0;z-index:2;display:grid;place-items:center;
+  background:linear-gradient(transparent 55%,rgba(16,12,10,.5));
+  transition:opacity .3s,visibility 0s linear .3s;
+}
+/* opacity leaves a control in the tab order; visibility takes it out with it */
+.cs-creator.is-live .cs-creator__play{opacity:0;visibility:hidden;pointer-events:none}
+.cs-creator__play i{
+  display:grid;place-items:center;font-style:normal;
+  width:clamp(42px,4.6vw,56px);aspect-ratio:1;border-radius:50%;
+  background:rgba(255,255,255,.94);color:var(--orange);
+  box-shadow:0 10px 24px rgba(0,0,0,.3);
+}
+.cs-creator__play svg{width:36%;height:auto;fill:currentColor;margin-left:9%}
+.cs-creator__sound{
+  position:absolute;z-index:3;right:10px;bottom:10px;
+  width:34px;height:34px;border-radius:50%;display:grid;place-items:center;
+  background:rgba(255,255,255,.92);color:var(--ink);
+  opacity:0;visibility:hidden;transition:opacity .3s,background .25s,visibility 0s linear .3s;
+}
+.cs-creator.is-live .cs-creator__sound{opacity:1;visibility:visible;transition-delay:0s}
+.cs-creator__sound svg{width:15px;height:15px;fill:currentColor}
+.cs-creator.is-loud .cs-creator__sound{background:var(--orange);color:#fff}
+
+/* ---------- the dense passage: the halo table ---------- */
+/* The courtyard the campaign was run from, thrown out of focus behind the panel.
+   The subject stays sharp — that separation is baked into the asset, so there is
+   no runtime blur to pay for and nothing to align. */
+.cs-dark{
+  position:relative;isolation:isolate;color:#fff;
+  margin-inline:calc(50% - 50vw);
+  padding-block:clamp(44px,6vw,96px);
+  background:#1d1510;
+}
+.cs-dark .shell{max-width:var(--shell);position:relative;z-index:1}
+
+/* the field's furniture: the photograph, the house mark, the client's own mark */
+.cs-dark__scene{position:absolute;inset:0;z-index:0;overflow:hidden;pointer-events:none}
+.cs-dark__photo{position:absolute;inset:0;width:100%;height:100%;object-fit:cover;object-position:22% 50%}
+/* Darkened at the top where the panel's corner sits, burning to the house orange
+   at the foot so the section still hands off to the warm page below it. */
+.cs-dark__scene::after{
+  content:"";position:absolute;inset:0;
+  background:
+    linear-gradient(180deg, rgba(16,12,9,.56) 0%, rgba(22,15,9,.30) 32%, rgba(150,80,22,.26) 78%, rgba(206,124,30,.56) 100%),
+    radial-gradient(64% 42% at 78% 96%, rgba(240,158,40,.52), transparent 74%);
+}
+.cs-dark__mark{
+  position:absolute;left:-2%;top:46%;width:clamp(190px,25vw,355px);
+  opacity:.52;rotate:-8deg;
+  mix-blend-mode:soft-light;
+}
+.cs-dark__client{
+  position:absolute;right:-3%;bottom:-6%;width:clamp(150px,19vw,280px);
+  opacity:.95;
+}
+
+/* the panel is the thing that was the band */
+.cs-dark__panel{
+  position:relative;
+  margin-left:auto;width:min(760px,100%);
+  background:var(--ink);border-radius:var(--r-lg);
+  padding:clamp(26px,3.4vw,54px);
+  box-shadow:0 40px 90px rgba(60,28,6,.34);
+}
+.cs-dark__panel h2{
+  font-family:var(--serif);font-weight:500;line-height:1.02;letter-spacing:-.015em;
+  font-size:clamp(27px,4.2vw,58px);max-width:18ch;
+}
+.cs-dark__panel h2 em{font-style:italic;color:#f0a68c}
+.cs-dark__panel > p{
+  margin-top:16px;max-width:60ch;color:rgba(255,255,255,.72);
+  font-size:var(--fs-lede);line-height:1.55;
+}
+
+.cs-table{width:100%;border-collapse:collapse;margin-top:clamp(26px,3.4vw,44px)}
+.cs-table caption{
+  caption-side:top;text-align:left;padding-bottom:14px;
+  font-size:clamp(11px,.95vw,13px);letter-spacing:.1em;text-transform:uppercase;
+  color:rgba(255,255,255,.55);font-weight:600;
+}
+.cs-table th,.cs-table td{
+  padding:clamp(11px,1.3vw,17px) 10px;text-align:right;
+  border-bottom:1px solid rgba(255,255,255,.16);
+  font-variant-numeric:tabular-nums;font-size:var(--fs-body);
+}
+.cs-table th:first-child,.cs-table td:first-child{text-align:left;padding-left:0}
+.cs-table td:last-child,.cs-table th:last-child{padding-right:0}
+.cs-table thead th{
+  font-size:clamp(10px,.9vw,12px);letter-spacing:.08em;text-transform:uppercase;
+  color:rgba(255,255,255,.55);font-weight:600;border-bottom-color:rgba(255,255,255,.32);
+}
+.cs-table tbody th{font-weight:400;color:rgba(255,255,255,.88)}
+.cs-table td{color:rgba(255,255,255,.72)}
+.cs-table .up,
+.cs-table .down{color:#f0a68c;font-weight:600}
+
+/* light variant for the tables outside the dark band */
+.cs-table--light th,.cs-table--light td{border-bottom-color:rgba(26,24,23,.14)}
+.cs-table--light thead th{color:var(--ink-2);border-bottom-color:rgba(26,24,23,.3)}
+.cs-table--light tbody th{color:var(--ink)}
+.cs-table--light td{color:var(--ink-2)}
+.cs-table--light caption{color:var(--ink-2)}
+
+/* ---------- caveat ---------- */
+.cs-caveat{
+  margin-top:clamp(22px,2.6vw,34px);
+  padding:clamp(16px,2vw,24px) clamp(18px,2.2vw,28px);
+  background:rgba(209,74,34,.07);border-radius:var(--r-md);
+  font-size:var(--fs-body);line-height:1.55;color:var(--ink-2);max-width:66ch;
+}
+.cs-dark .cs-caveat{background:rgba(255,255,255,.07);color:rgba(255,255,255,.74)}
+.cs-caveat strong{color:var(--ink);font-weight:600}
+
+/* the reporting note qualifies the whole page rather than one claim, so it reads
+   as a footnote instead of a third caveat panel */
+.cs-note{
+  margin-top:clamp(22px,2.6vw,34px);padding-top:16px;
+  border-top:1px solid rgba(26,24,23,.18);
+  max-width:66ch;color:var(--ink-2);
+  font-size:clamp(12px,1.05vw,14px);line-height:1.55;
+}
+.cs-note strong{color:var(--ink);font-weight:600}
+.cs-dark .cs-caveat strong{color:#fff}
+
+/* ---------- takeaways ---------- */
+.cs-takeaways{display:grid;gap:0;margin-top:clamp(22px,2.6vw,34px);max-width:70ch}
+.cs-takeaways li{
+  display:grid;grid-template-columns:1.6rem 1fr;gap:14px;
+  padding:clamp(13px,1.5vw,19px) 0;border-bottom:1px solid rgba(26,24,23,.14);
+  font-size:var(--fs-lede);line-height:1.5;color:var(--ink-2);
+}
+.cs-takeaways li:last-child{border-bottom:0}
+.cs-takeaways li::before{
+  content:"";width:9px;height:9px;border-radius:50%;background:var(--orange);
+  margin-top:.5em;
+}
+
+/* ---------- close ---------- */
+.cs-close{
+  text-align:center;padding-block:clamp(54px,7vw,110px);
+}
+.cs-close h2{
+  font-family:var(--serif);font-weight:500;line-height:1.02;
+  font-size:clamp(30px,4.8vw,64px);max-width:16ch;margin-inline:auto;
+}
+.cs-close h2 em{font-style:italic}
+.cs-close p{margin:18px auto 0;max-width:52ch;color:var(--ink-2);font-size:var(--fs-lede);line-height:1.55}
+.cs-close__actions{display:flex;gap:12px;justify-content:center;flex-wrap:wrap;margin-top:clamp(24px,3vw,36px)}
+
+/* ---------- responsive ---------- */
+/* Only the four-column comparison needs a floor. min-width:0 stops that floor
+   propagating up the grid and dragging the whole section off a phone screen. */
+.cs-scroll{min-width:0}
+.cs-scroll--wide{position:relative}
+
+.cs-scroll__hint{
+  display:none;margin-top:10px;
+  font-size:clamp(11px,.95vw,12.5px);color:var(--ink-3);
+}
+.cs-dark .cs-scroll__hint{color:rgba(255,255,255,.6)}
+
+@media (max-width:900px){
+  /* no margin for furniture once the panel takes the full width */
+  .cs-dark__mark{display:none}
+  .cs-dark__photo{object-position:28% 44%}
+  .cs-dark__client{width:clamp(96px,22vw,150px);right:-4%;bottom:-3%;opacity:.85}
+  .cs-dark__panel{width:100%}
+}
+@media (max-width:1280px){
+  /* Below this the page margin is too thin to hold a prop clear of the type,
+     and one clipped by `overflow-x:clip` reads as a bug, not a collage. */
+  .cs-prop{display:none}
+}
+@media (max-width:1000px){
+  /* the figures wrap onto a second row here, and a pill around two rows of
+     text stops looking like a pill */
+  .cs-inline--bar{border-radius:var(--r-lg)}
+}
+@media (max-width:700px){
+  /* flex leaves the fourth figure stranded on a row of its own; a 2x2 keeps
+     the four reading as one set, and lets the row and column gaps differ */
+  .cs-inline--bar{
+    display:grid;grid-template-columns:1fr 1fr;
+    gap:clamp(18px,4.5vw,26px) clamp(14px,4vw,24px);
+  }
+}
+@media (max-width:760px){
+  .cs-link__grid{grid-template-columns:1fr;gap:12px}
+  .cs-link__n::after{display:none}
+  .cs-statement{max-width:none}
+  .cs-scroll--wide{
+    overflow-x:auto;
+    margin-inline:calc(-1 * var(--gut));padding-inline:var(--gut);
+    /* the global scrollbar theming hides the usual cue, and the CHANGE column
+       (the section's whole argument) starts off-screen — so fade the edge */
+    -webkit-mask-image:linear-gradient(90deg,#000 88%,transparent);
+            mask-image:linear-gradient(90deg,#000 88%,transparent);
+  }
+  .cs-scroll--wide .cs-table{min-width:540px}
+  .cs-scroll__hint{display:block}
+}
+
+/* ---------- browser surfaces ---------- */
+::selection{background:rgba(209,74,34,.22);color:var(--ink)}
+html{scrollbar-color:rgba(26,24,23,.3) transparent}
+::-webkit-scrollbar{width:11px;height:11px}
+::-webkit-scrollbar-track{background:transparent}
+::-webkit-scrollbar-thumb{background:rgba(26,24,23,.26);border-radius:99px;border:3px solid var(--paper)}
+::-webkit-scrollbar-thumb:hover{background:rgba(26,24,23,.42)}
 
 /* ============================================================
    REVEAL

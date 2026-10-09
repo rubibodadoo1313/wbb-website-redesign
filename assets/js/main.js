@@ -547,3 +547,91 @@
       .then(function () { submit.disabled = false; });
   });
 })();
+
+/* ---------- case study: creator video rail ----------------------------
+   Four real campaign videos. Each tile is a poster until it is asked for,
+   so the page costs four JPEGs to read and only downloads an mp4 on a
+   deliberate click. One plays at a time.
+---------------------------------------------------------------------- */
+(function () {
+  'use strict';
+
+  var tiles = document.querySelectorAll('.cs-creator[data-video]');
+  if (!tiles.length) return;
+
+  var playing = null;
+
+  function build(tile) {
+    var existing = tile.querySelector('video');
+    if (existing) return existing;
+
+    var v = document.createElement('video');
+    v.src = tile.getAttribute('data-video');
+    v.playsInline = true;
+    v.setAttribute('playsinline', '');
+    v.loop = true;
+    v.muted = true;
+    // Chrome reads the muted ATTRIBUTE when it decides whether a play() is
+    // allowed; the property alone lets the promise reject and the tile reset.
+    v.setAttribute('muted', '');
+    v.preload = 'auto';
+    var poster = tile.querySelector('img');
+    if (poster) v.setAttribute('aria-label', poster.alt || 'Creator video');
+    tile.insertBefore(v, tile.firstChild.nextSibling);
+    return v;
+  }
+
+  function stop(tile) {
+    var v = tile.querySelector('video');
+    if (v) { v.pause(); v.currentTime = 0; v.muted = true; }
+    tile.classList.remove('is-live', 'is-loud');
+    if (playing === tile) playing = null;
+  }
+
+  function start(tile) {
+    if (playing && playing !== tile) stop(playing);
+    var v = build(tile);
+    tile.classList.add('is-live');
+    playing = tile;
+    var p = v.play();
+    if (p && typeof p.catch === 'function') p.catch(function () { stop(tile); });
+  }
+
+  Array.prototype.forEach.call(tiles, function (tile) {
+    var playBtn = tile.querySelector('.cs-creator__play');
+    var soundBtn = tile.querySelector('.cs-creator__sound');
+
+    var label = playBtn && playBtn.getAttribute('aria-label');
+
+    if (playBtn) {
+      playBtn.addEventListener('click', function () {
+        if (tile.classList.contains('is-live')) stop(tile);
+        else start(tile);
+        // it is one button doing two things, so it has to name the next one
+        playBtn.setAttribute('aria-label',
+          tile.classList.contains('is-live') ? label.replace('Play', 'Pause') : label);
+      });
+    }
+
+    if (soundBtn) {
+      soundBtn.addEventListener('click', function (e) {
+        e.stopPropagation();             // the tile below also toggles playback
+        var v = tile.querySelector('video');
+        if (!v) return;
+        v.muted = !v.muted;
+        tile.classList.toggle('is-loud', !v.muted);
+        soundBtn.setAttribute('aria-label', v.muted ? 'Unmute' : 'Mute');
+      });
+    }
+  });
+
+  // a video scrolled well out of the rail has stopped being watched
+  if ('IntersectionObserver' in window) {
+    var io = new IntersectionObserver(function (entries) {
+      entries.forEach(function (en) {
+        if (!en.isIntersecting && en.target.classList.contains('is-live')) stop(en.target);
+      });
+    }, { threshold: 0.25 });
+    Array.prototype.forEach.call(tiles, function (t) { io.observe(t); });
+  }
+})();
