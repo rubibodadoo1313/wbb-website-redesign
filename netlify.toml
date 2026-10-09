@@ -3,3 +3,61 @@
 # (see the <form name="contact" data-netlify="true"> in each page).
 [build]
   publish = "."
+
+# ---------------------------------------------------------------------------
+# Clean URLs. The pages are flat .html files, but nobody should ever see that
+# in the address bar.
+#
+# Two halves, and both are needed:
+#   1. The 301s retire the old .html addresses. `force` is required because
+#      the file really is there, and Netlify serves an existing file in
+#      preference to a redirect unless told otherwise.
+#   2. The 200s are rewrites, not redirects: /activities has no file behind
+#      it, so Netlify serves activities.html under that address without the
+#      browser ever being sent somewhere else.
+#
+# The two sets cannot loop into each other: every `from` on the left has a
+# .html extension and every `from` on the right does not.
+#
+# Internal links already point at the clean paths, so the 301s are only for
+# links that escaped into the world before this change.
+# ---------------------------------------------------------------------------
+
+[[redirects]]
+  from = "/index.html"
+  to = "/"
+  status = 301
+  force = true
+
+[[redirects]]
+  from = "/activities.html"
+  to = "/activities"
+  status = 301
+  force = true
+
+[[redirects]]
+  from = "/careers.html"
+  to = "/careers"
+  status = 301
+  force = true
+
+[[redirects]]
+  from = "/case-study-eve-sleep.html"
+  to = "/case-study-eve-sleep"
+  status = 301
+  force = true
+
+[[redirects]]
+  from = "/activities"
+  to = "/activities.html"
+  status = 200
+
+[[redirects]]
+  from = "/careers"
+  to = "/careers.html"
+  status = 200
+
+[[redirects]]
+  from = "/case-study-eve-sleep"
+  to = "/case-study-eve-sleep.html"
+  status = 200
